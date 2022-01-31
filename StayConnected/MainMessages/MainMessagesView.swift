@@ -10,6 +10,11 @@ import SwiftUI
 struct MainMessagesView: View {
     
     
+    @State var modeName = "Light Mode"
+    @State var color = ColorScheme.light
+    @State var x = true
+    
+
     @State var shouldShowLogOutOptions = false
     
     
@@ -38,14 +43,16 @@ struct MainMessagesView: View {
             Button {
                 shouldShowLogOutOptions.toggle()
             } label: {
-                Image(systemName: "gear")
+                Image(systemName: "gearshape.fill")
                     .font(.system(size: 24, weight: .bold))
                     .foregroundColor(Color(.label))
             }
-            
+ 
 
         }
         .padding()
+        
+        
         
         // sets the option of logging out or cancelling operation
         .actionSheet(isPresented: $shouldShowLogOutOptions) {
@@ -58,24 +65,72 @@ struct MainMessagesView: View {
     }
     
     
+    
+    
     var body: some View {
         
         NavigationView {
             
             VStack {
                 // custom navigation bar
+                ToggleView
                 CustomNavigationBar
                 messagesView
+                
                 
             }.overlay(
                newMessageButton, alignment: .bottom)
             .navigationBarHidden(true)
-            
+   
         }
                 
     }
     
     
+    // allows user to enable dark mode view
+    private var ToggleView: some View {
+        VStack {
+            Button(
+                 action: {
+                     if x == true {
+                         modeName = "Dark Mode"
+                         color = .dark
+                         self.x.toggle()
+                     }
+                     else {
+                         modeName = "Light Mode"
+                         color = .light
+                         self.x.toggle()
+                     }
+                 },
+                 
+                 label: {
+                     Spacer()
+                     Text("Enable Dark mode")
+                         .font(.system(size: 12))
+                         .foregroundColor(Color(.label))
+                         .offset(x:-12)
+                     
+                     Image(systemName: "togglepower")
+                         .foregroundColor(.white)
+                         .font(.system(size: 16, weight: .bold))
+                         .padding(5)
+                         .background(Color(.label))
+                         .cornerRadius(90)
+                         .offset(x:-12)
+     
+                 }
+        
+             )
+       
+        }
+  
+       .preferredColorScheme(color)
+    }
+}
+        
+
+
     private var messagesView: some View {
         ScrollView {
             ForEach(0..<10, id: \.self) { num in
@@ -132,13 +187,11 @@ struct MainMessagesView: View {
                 .shadow(radius: 15)
         }
     }
-}
 
 
 
 struct MainMessagesView_Previews: PreviewProvider {
     static var previews: some View {
         MainMessagesView()
-            .preferredColorScheme(.dark)
     }
 }

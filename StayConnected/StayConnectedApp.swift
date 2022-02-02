@@ -11,7 +11,7 @@ import SwiftUI
 struct StayConnectedApp: App {
     var body: some Scene {
         WindowGroup {
-            LoginView()
+            MainMessagesView()
         }
     }
 }

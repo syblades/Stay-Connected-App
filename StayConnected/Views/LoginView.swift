@@ -7,35 +7,18 @@
 
 import SwiftUI
 import Firebase
-import FirebaseFirestore
 
-class FirebaseManager: NSObject {
-    
-    let auth: Auth
-    let storage: Storage
-    let firestore: Firestore
-    
-    
-    static let shared = FirebaseManager()
-    
-    override init() {
-        FirebaseApp.configure()
-        
-        self.auth = Auth.auth()
-        self.storage = Storage.storage()
-        self.firestore = Firestore.firestore()
-        
-        super.init()
-    }
-}
 
 struct LoginView: View {
     
-    @State var isLoginMode = false
-    @State var email = ""
-    @State var password = ""
+    let didFinishLogin: () -> () // closure
     
-    @ State var shouldShowImagePicker = false
+    @State private var isLoginMode = false
+    @State private var email = ""
+    @State private var password = ""
+    @State private var username = ""
+    
+    @State private var shouldShowImagePicker = false
     
    
     var body: some View {
@@ -81,12 +64,23 @@ struct LoginView: View {
                             // creates a round border around profile image
                             .overlay(RoundedRectangle(cornerRadius: 64)
                                         .stroke(Color.black, lineWidth: 3))
+
                         
                         }
+                        
+                        
+                        
+                        TextField("Username", text: $username)
+                            .keyboardType(.default)
+                            .autocapitalization(.none)
+                            .padding(12)
+                            .background(Color.white)
                     }
                     
+
                     
                     // allows me to apply padding and background setting to multiple instances using the 'Group' type
+                    
                     Group {
                         TextField("Email", text: $email)
                             .keyboardType(.emailAddress)
@@ -135,7 +129,7 @@ struct LoginView: View {
         }
     }
     
-    @ State var image: UIImage?
+    @State var image: UIImage?
     
 
     // TODO: ADD OTHER LOGIN OPTIONS (GOOGLE, GITHUB etc.)
@@ -162,12 +156,19 @@ struct LoginView: View {
             print("Successfully logged in as user: \(result?.user.uid ?? "")")
             
             self.loginStatusMessage = "Successfully logged in as user: \(result?.user.uid ?? "")"
+            
+            self.didFinishLogin()
         }
     }
     
     @State var loginStatusMessage = ""
     
     private func createNewAccount() {
+        
+        if self.image == nil {
+            self.loginStatusMessage = "You must select a profile photo"
+            return
+        }
         FirebaseManager.shared.auth.createUser(withEmail: email, password: password) {
             result, err in
             if let err = err {
@@ -214,7 +215,7 @@ struct LoginView: View {
         guard let uid = FirebaseManager.shared.auth.currentUser?.uid else { return }
         
         // creating dictionary to establish what data we are saving from the user
-        let userData = ["email": self.email, "uid": uid, "profileImageURL": imageProfileUrl.absoluteString]
+        let userData = ["username": self.username, "email": self.email, "uid": uid, "profileImageURL": imageProfileUrl.absoluteString]
         
         // creating collection 'users' in firestore db
         // each document is the users 'uid'
@@ -227,12 +228,16 @@ struct LoginView: View {
                 }
                 
                 print("Success!")
+                
+                self.didFinishLogin()
             }
     }
 }
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        LoginView()
+        LoginView(didFinishLogin: {
+
+        })
     }
 }

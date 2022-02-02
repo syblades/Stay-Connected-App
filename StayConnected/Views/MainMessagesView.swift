@@ -5,28 +5,52 @@
 //  Created by Symone Blades on 1/30/22.
 //
 
+// private function gives access only to the class itself
+
 import SwiftUI
+import SDWebImageSwiftUI
+
 
 struct MainMessagesView: View {
     
-    
-    @State var modeName = "Light Mode"
-    @State var color = ColorScheme.light
-    @State var x = true
-    
-
     @State var shouldShowLogOutOptions = false
+    @ObservedObject private var viewModel = MainMessagesViewModel()
+    
+    
+    var body: some View {
+        NavigationView {
+            
+            VStack {
+                CustomNavigationBar
+                messagesView
+
+            }.overlay(
+               newMessageButton, alignment: .bottom)
+            .navigationBarHidden(true)
+        }
+                
+    }
     
     
     private var CustomNavigationBar: some View {
         
         HStack(spacing: 16) {
             
+            // uses SD Web Image package to fetch user profile image from storage
+            WebImage(url: URL(string: viewModel.appUser?.profileImageURL ?? ""))
+                .resizable()
+                .scaledToFill()
+                .frame(width: 50, height: 50)
+                .clipped()
+                .cornerRadius(50)
+                .overlay(RoundedRectangle(cornerRadius: 44)
+                            .stroke(Color(.label), lineWidth: 1)
+                )
+                .shadow(radius: 5)
             
-            Image(systemName: "person.fill")
-                .font(.system(size: 34, weight:.heavy))
+
             VStack(alignment: .leading, spacing: 4) {
-                Text("USERNAME")
+                Text(" \(viewModel.appUser?.username ?? "")")
                     .font(.system(size: 24, weight: .bold))
                 HStack {
                     Circle()
@@ -40,14 +64,26 @@ struct MainMessagesView: View {
             }
         
             Spacer()
-            Button {
-                shouldShowLogOutOptions.toggle()
+            
+            // TODO: need to incorporate Profile settings view in this button action
+            Menu {
+                Button(action:{}, label: {
+                    Text("Settings")
+                })
+                    // edit profile, enable dark mode, delete profile
+                
+                
+                Button(action:{shouldShowLogOutOptions.toggle()}, label: {
+                    Text("Logout")
+                })
             } label: {
-                Image(systemName: "gearshape.fill")
-                    .font(.system(size: 24, weight: .bold))
-                    .foregroundColor(Color(.label))
-            }
- 
+                Label(
+                    title: {Text("")},
+                    icon: { Image(systemName: "gearshape.fill")}
+                    
+                )
+            }.font(.system(size: 24, weight: .bold))
+            .foregroundColor(Color(.label))
 
         }
         .padding()
@@ -56,77 +92,22 @@ struct MainMessagesView: View {
         
         // sets the option of logging out or cancelling operation
         .actionSheet(isPresented: $shouldShowLogOutOptions) {
-            .init(title: Text("Settings"), message: Text("Do you want to Log Out?"), buttons: [ .destructive(Text("Log Out"), action: {
+            .init(title: Text(""), message: Text("Sure You Want to Log Out?"), buttons: [ .destructive(Text("Log Me Out"), action: {
                     print("handle log out")
+                    viewModel.handleLogOut()
                 }),
                     .cancel()
             ])
-        }
-    }
-    
-    
-    
-    
-    var body: some View {
-        
-        NavigationView {
             
-            VStack {
-                // custom navigation bar
-                ToggleView
-                CustomNavigationBar
-                messagesView
-                
-                
-            }.overlay(
-               newMessageButton, alignment: .bottom)
-            .navigationBarHidden(true)
-   
         }
-                
-    }
-    
-    
-    // allows user to enable dark mode view
-    private var ToggleView: some View {
-        VStack {
-            Button(
-                 action: {
-                     if x == true {
-                         modeName = "Dark Mode"
-                         color = .dark
-                         self.x.toggle()
-                     }
-                     else {
-                         modeName = "Light Mode"
-                         color = .light
-                         self.x.toggle()
-                     }
-                 },
-                 
-                 label: {
-                     Spacer()
-                     Text("Enable Dark mode")
-                         .font(.system(size: 12))
-                         .foregroundColor(Color(.label))
-                         .offset(x:-12)
-                     
-                     Image(systemName: "togglepower")
-                         .foregroundColor(.white)
-                         .font(.system(size: 16, weight: .bold))
-                         .padding(5)
-                         .background(Color(.label))
-                         .cornerRadius(90)
-                         .offset(x:-12)
-     
-                 }
-        
-             )
-       
+        .fullScreenCover(isPresented: $viewModel.UserCurrentlyLoggedOut, onDismiss: nil){
+            LoginView(didFinishLogin: {
+                self.viewModel.UserCurrentlyLoggedOut = false
+                self.viewModel.fetchCurrentUser()
+            })
         }
-  
-       .preferredColorScheme(color)
     }
+    //CREATE full screen cover here for settings page
 }
         
 

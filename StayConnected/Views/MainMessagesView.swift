@@ -14,6 +14,13 @@ import SDWebImageSwiftUI
 struct MainMessagesView: View {
     
     @State var shouldShowLogOutOptions = false
+    // handling click action on new message button
+    @State var showCreateMessageScreen = false
+    
+    @State var navigateToChatLogView = false
+    
+    @State var showSettingsScreen = false
+    
     @ObservedObject private var viewModel = MainMessagesViewModel()
     
     
@@ -23,6 +30,10 @@ struct MainMessagesView: View {
             VStack {
                 CustomNavigationBar
                 messagesView
+                
+                NavigationLink("", isActive: $navigateToChatLogView) {
+                    MessageHistoryView(appUser: self.appUser)
+                }
 
             }.overlay(
                newMessageButton, alignment: .bottom)
@@ -65,31 +76,40 @@ struct MainMessagesView: View {
         
             Spacer()
             
-            // TODO: need to incorporate Profile settings view in this button action
-            Menu {
-                Button(action:{}, label: {
-                    Text("Settings")
-                })
-                    // edit profile, enable dark mode, delete profile
-                
-                
-                Button(action:{shouldShowLogOutOptions.toggle()}, label: {
-                    Text("Logout")
-                })
-            } label: {
-                Label(
-                    title: {Text("")},
-                    icon: { Image(systemName: "gearshape.fill")}
-                    
-                )
-            }.font(.system(size: 24, weight: .bold))
-            .foregroundColor(Color(.label))
 
+            
+           
+        VStack {
+            NavigationLink {
+                ProfileSettingsView()
+                Button {
+                    shouldShowLogOutOptions.toggle()
+                } label: {
+                    Spacer()
+                    Text("Log Out")
+                        .font(.system(size: 20, weight:.bold))
+                    Spacer()
+
+                }
+                .foregroundColor(.white)
+                .padding(.vertical)
+                .background(Color.blue)
+                .cornerRadius(32)
+                .padding(.horizontal)
+                .shadow(radius: 15)
+
+            } label: {
+                Text("")
+                Image(systemName: "gearshape.fill")
+                .font(.system(size: 24, weight: .bold))
+                .foregroundColor(Color(.label))
+            }
         }
+
+    }
+
         .padding()
-        
-        
-        
+
         // sets the option of logging out or cancelling operation
         .actionSheet(isPresented: $shouldShowLogOutOptions) {
             .init(title: Text(""), message: Text("Sure You Want to Log Out?"), buttons: [ .destructive(Text("Log Me Out"), action: {
@@ -107,36 +127,40 @@ struct MainMessagesView: View {
             })
         }
     }
-    //CREATE full screen cover here for settings page
-}
-        
-
+    
 
     private var messagesView: some View {
         ScrollView {
             ForEach(0..<10, id: \.self) { num in
                 // grouped entire message view minus the header in order to apply horizontal padding
+                
                 VStack {
-                    HStack(spacing: 16) {
-                        Image(systemName: "person.fill")
-                            .font(.system(size: 32))
-                            .padding(8)
-                            .overlay(RoundedRectangle(cornerRadius: 44)
-                                        .stroke(Color(.label), lineWidth: 1) // support dark and light mode
-                            )
-                        VStack(alignment: .leading) {
-                            Text("Username")
-                                .font(.system(size: 14, weight: .bold))
-                            Text("Message sent to user")
-                                .font(.system(size: 14))
-                                .foregroundColor(Color(.lightGray))
-                                        
+                    NavigationLink {
+                        Text("Recent Messages Chat History View w/ Another User") // click on message in messageview it will take you to chat log view for user
+                    } label: {
+                        HStack(spacing: 16) {
+                            Image(systemName: "person.fill")
+                                .font(.system(size: 32))
+                                .padding(8)
+                                .overlay(RoundedRectangle(cornerRadius: 44)
+                                            .stroke(Color(.label), lineWidth: 1) // support dark and light mode
+                                )
+                            VStack(alignment: .leading) {
+                                Text("Username")
+                                    .font(.system(size: 14, weight: .bold))
+                                Text("Message sent to user")
+                                    .font(.system(size: 14))
+                                    .foregroundColor(Color(.lightGray))
+                                            
+                            }
+                            Spacer()
+                            
+                            Text("22d")
+                                .font(.system(size: 14, weight: .semibold))
                         }
-                        Spacer()
-                        
-                        Text("22d")
-                            .font(.system(size: 14, weight: .semibold))
                     }
+
+                    
                     Divider()
                         .padding(.vertical, 8)
                 }.padding(.horizontal)
@@ -148,10 +172,10 @@ struct MainMessagesView: View {
         
     }
     
-    
+   
     private var newMessageButton: some View {
         Button {
-        
+            showCreateMessageScreen.toggle()
         } label: {
             HStack {
                 Spacer()
@@ -167,9 +191,33 @@ struct MainMessagesView: View {
                 .padding(.horizontal)
                 .shadow(radius: 15)
         }
+        .fullScreenCover(isPresented: $showCreateMessageScreen) {
+            NewMessageView(selectedNewUser: { user in
+                print(user.username)
+                // new message -> user -> displays chat history with that user
+                self.navigateToChatLogView.toggle()
+                self.appUser = user // what user we selected
+            })
+        }
     }
-
-
+    
+    @State var appUser: AppUser? // user will be nil in the beginning
+    
+    struct MessageHistoryView: View {
+        let appUser: AppUser?
+        var body: some View {
+    
+            ScrollView {
+                ForEach(0..<10) { num in
+                    Text("Sample Message")
+                }
+                
+            }.navigationTitle(appUser?.username ?? "") // displays the users username at the top of the chat window
+                .navigationBarTitleDisplayMode(.inline)
+        }
+            
+    }
+}
 
 struct MainMessagesView_Previews: PreviewProvider {
     static var previews: some View {

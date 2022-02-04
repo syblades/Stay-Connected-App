@@ -7,7 +7,10 @@
 
 import Foundation
 
-struct AppUser {
+struct AppUser: Identifiable {
+    
+    var id: String { uid } // getter syntax. For every Identifable need a variable
+    
     let username, uid, email, profileImageURL: String
     
     init(data: [String: Any]) {

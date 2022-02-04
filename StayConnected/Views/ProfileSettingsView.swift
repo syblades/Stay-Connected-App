@@ -10,7 +10,8 @@ import SwiftUI
 
 
 struct ProfileSettingsView: View {
-    
+    @Environment(\.presentationMode) var presentationMode
+
     
     // had to set initial value of background in order to change
     init(){
@@ -29,13 +30,10 @@ struct ProfileSettingsView: View {
                             .foregroundColor(Color.red)
                     }.font(.system(size: 18, weight: .semibold))
                     .navigationTitle("User Settings")
-                    .padding(.vertical)
-
                 }
-
             }
-
         }.background(Color(.label))
+        
         
     }
         

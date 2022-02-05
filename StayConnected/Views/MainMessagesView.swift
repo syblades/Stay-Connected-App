@@ -32,7 +32,7 @@ struct MainMessagesView: View {
                 messagesView
                 
                 NavigationLink("", isActive: $navigateToChatLogView) {
-                    MessageHistoryView(appUser: self.appUser)
+                    MessageLogView(appUser: self.appUser)
                 }
 
             }.overlay(
@@ -104,6 +104,7 @@ struct MainMessagesView: View {
                 .font(.system(size: 24, weight: .bold))
                 .foregroundColor(Color(.label))
             }
+           
         }
 
     }
@@ -203,20 +204,7 @@ struct MainMessagesView: View {
     
     @State var appUser: AppUser? // user will be nil in the beginning
     
-    struct MessageHistoryView: View {
-        let appUser: AppUser?
-        var body: some View {
-    
-            ScrollView {
-                ForEach(0..<10) { num in
-                    Text("Sample Message")
-                }
-                
-            }.navigationTitle(appUser?.username ?? "") // displays the users username at the top of the chat window
-                .navigationBarTitleDisplayMode(.inline)
-        }
-            
-    }
+  
 }
 
 struct MainMessagesView_Previews: PreviewProvider {

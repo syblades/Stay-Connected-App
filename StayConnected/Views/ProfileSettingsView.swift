@@ -21,20 +21,17 @@ struct ProfileSettingsView: View {
     var body: some View {
         ZStack {
             VStack {
-                NavigationView {
-                    Form {
-                        DarkModeView()
-                        Text("Update Username")
-                        Text("Update Password")
-                        Text("DELETE ACCOUNT")
-                            .foregroundColor(Color.red)
-                    }.font(.system(size: 18, weight: .semibold))
-                    .navigationTitle("User Settings")
-                }
+                Form {
+                    DarkModeView()
+                    Text("Update Username")
+                    Text("Update Password")
+                    Text("DELETE ACCOUNT")
+                        .foregroundColor(Color.red)
+                }.font(.system(size: 18, weight: .semibold))
+                .navigationTitle("User Settings")
             }
-        }.background(Color(.label))
-        
-        
+        }
+
     }
         
 }

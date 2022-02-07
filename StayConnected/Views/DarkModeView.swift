@@ -9,8 +9,8 @@ import SwiftUI
 
 
 struct DarkModeView: View {
-    @State private var darkMode: Bool = false
-    @State private var currentMode: ColorScheme = .light
+    @State var darkMode: Bool = false
+    @State var currentMode: ColorScheme = .light
     var body: some View {
         VStack {
             Toggle("Enable Dark Mode", isOn: $darkMode)

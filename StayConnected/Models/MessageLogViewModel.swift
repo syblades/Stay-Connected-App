@@ -76,6 +76,14 @@ class MessageLogViewModel: ObservableObject {
                         self.appMessages.append(.init(documentId: change.document.documentID, data: data))
                     }
                 })
+                
+                //waits for next available main thread frame, then it will execute the count change then the scrollview proxy
+                // can animate itself properly
+                DispatchQueue.main.async {
+                    self.count += 1 // should help auto scroll
+
+                }
+                
             }
 
     }
@@ -102,6 +110,7 @@ class MessageLogViewModel: ObservableObject {
             }
             print("Hey sender, we have successfully saved your message!")
             self.messageText = "" // after the message is sent the textfield will clear out
+            self.count += 1
         }
         
         let recipientMessageDocument = FirebaseManager.shared.firestore.collection("messages") // collection stores all messages between users (message log view)
@@ -118,4 +127,6 @@ class MessageLogViewModel: ObservableObject {
 
         }
     }
+    
+    @Published var count = 0
 }

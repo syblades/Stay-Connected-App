@@ -34,7 +34,7 @@
 		3D01101B27AA29750003A1AE /* AppUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppUser.swift; sourceTree = "<group>"; };
 		3D02B68027ADA3EA00B87EE9 /* MessageLogView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageLogView.swift; sourceTree = "<group>"; };
 		3D02B68227AE005600B87EE9 /* MessageLogViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageLogViewModel.swift; sourceTree = "<group>"; };
-		3D02B68427B097B100B87EE9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		3D02B68427B097B100B87EE9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3D02B68527B098B300B87EE9 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 		3D0B325F27AA497700D5A1A9 /* MainMessages.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMessages.swift; sourceTree = "<group>"; };
 		3D0B326327AA4D9700D5A1A9 /* DarkModeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DarkModeView.swift; sourceTree = "<group>"; };

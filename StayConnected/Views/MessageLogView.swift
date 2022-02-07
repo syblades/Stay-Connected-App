@@ -30,47 +30,34 @@ struct MessageLogView: View {
         
         .navigationTitle(appUser?.username ?? "") // displays the users username at the top of the chat window
             .navigationBarTitleDisplayMode(.inline)
+//            .navigationBarItems(trailing: Button(action: {
+//                viewModel.count += 1
+//            }, label: {
+//                Text("Count: \(viewModel.count)")
+//            }))
     }
    
-    
+    static let emptyScroll = "Empty"
     private var messagesView: some View {
         VStack {
             ScrollView {
-                ForEach(viewModel.appMessages) { message in
-                    
+                ScrollViewReader { scrollViewProxy in
                     VStack {
-                        if message.fromId == FirebaseManager.shared.auth.currentUser?.uid { // checking to see if this user if the sender to set the ui for the message log view
-                            HStack {
-                                Spacer()
-                                HStack {
-                                    Text(message.text)
-                                        .foregroundColor(.white)
-                                }
-                                .padding()
-                                .background(Color.blue)
-                                .cornerRadius(8)
-                            }
+                        ForEach(viewModel.appMessages) { message in
+                            MessageView(message: message)
+                        }
                         
-                        } else { // recipient message ui
-                            HStack {
-                                HStack {
-                                    Text(message.text)
-                                        .foregroundColor(.black)
-                                }
-                                .padding()
-                                .background(Color.white)
-                                .cornerRadius(8)
-                                Spacer()
-                            }
+                        HStack{ Spacer() }
+                        .id(Self.emptyScroll)
+                    }
+                    .onReceive(viewModel.$count) { _ in
+                        withAnimation(.easeOut(duration: 0.5)) {
+                            scrollViewProxy.scrollTo(Self.emptyScroll, anchor: .bottom)
                         }
                     }
-                    .padding(.horizontal)
-                    .padding(.top, 8)
-                   
+
                     
                 }
-                
-                HStack{ Spacer() }
                 
             }
             .background(Color(.init(white: 0.95, alpha: 1)))
@@ -89,7 +76,7 @@ struct MessageLogView: View {
             
             Image(systemName: "photo.on.rectangle.angled")
                 .font(.system(size: 24))
-                .foregroundColor(Color(.darkGray))
+                .foregroundColor(Color(.label))
             
             ZStack {
                 DescriptionPlaceholder()
@@ -117,6 +104,43 @@ struct MessageLogView: View {
 
 }
 
+struct MessageView: View {
+    
+    let message: AppMessage
+    
+    var body: some View {
+        
+        VStack {
+            if message.fromId == FirebaseManager.shared.auth.currentUser?.uid { // checking to see if this user if the sender to set the ui for the message log view
+                HStack {
+                    Spacer()
+                    HStack {
+                        Text(message.text)
+                            .foregroundColor(.white)
+                    }
+                    .padding()
+                    .background(Color.blue)
+                    .cornerRadius(8)
+                }
+            
+            } else { // recipient message ui
+                HStack {
+                    HStack {
+                        Text(message.text)
+                            .foregroundColor(Color(.label))
+                    }
+                    .padding()
+                    .background(Color.green)
+                    .cornerRadius(8)
+                    Spacer()
+                }
+            }
+        }
+        .padding(.horizontal)
+        .padding(.top, 8)
+    }
+}
+
 
 private struct DescriptionPlaceholder: View {
     
@@ -134,9 +158,12 @@ private struct DescriptionPlaceholder: View {
 
 struct MessageLogView_Previews: PreviewProvider {
     static var previews: some View {
-        NavigationView {
-            MessageLogView(appUser: .init(data: ["username" : "syblades"]))
-        }
-        }
+        MainMessagesView()
+//        MessageLogView(appUser: .init(data: ["username" : "syblades"]))
+//        NavigationView {
+//            MessageLogView(appUser: .init(data: ["username" : "syblades"]))
+        //        }
+
+    }
 
 }

@@ -19,7 +19,6 @@ struct ProfileSettingsView: View {
        }
     
     var body: some View {
-        ZStack {
             VStack {
                 Form {
                     DarkModeView()
@@ -30,7 +29,6 @@ struct ProfileSettingsView: View {
                 }.font(.system(size: 18, weight: .semibold))
                 .navigationTitle("User Settings")
             }
-        }
 
     }
         

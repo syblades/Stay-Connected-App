@@ -36,19 +36,37 @@ struct MessageLogView: View {
     private var messagesView: some View {
         VStack {
             ScrollView {
-                ForEach(0..<20) { num in
-                    HStack {
-                        Spacer()
-                        HStack {
-                            Text("Sample Message")
-                                .foregroundColor(.white)
+                ForEach(viewModel.appMessages) { message in
+                    
+                    VStack {
+                        if message.fromId == FirebaseManager.shared.auth.currentUser?.uid { // checking to see if this user if the sender to set the ui for the message log view
+                            HStack {
+                                Spacer()
+                                HStack {
+                                    Text(message.text)
+                                        .foregroundColor(.white)
+                                }
+                                .padding()
+                                .background(Color.blue)
+                                .cornerRadius(8)
+                            }
+                        
+                        } else { // recipient message ui
+                            HStack {
+                                HStack {
+                                    Text(message.text)
+                                        .foregroundColor(.black)
+                                }
+                                .padding()
+                                .background(Color.white)
+                                .cornerRadius(8)
+                                Spacer()
+                            }
                         }
-                        .padding()
-                        .background(Color.blue)
-                        .cornerRadius(8)
                     }
                     .padding(.horizontal)
                     .padding(.top, 8)
+                   
                     
                 }
                 
@@ -119,6 +137,6 @@ struct MessageLogView_Previews: PreviewProvider {
         NavigationView {
             MessageLogView(appUser: .init(data: ["username" : "syblades"]))
         }
+        }
 
-    }
 }

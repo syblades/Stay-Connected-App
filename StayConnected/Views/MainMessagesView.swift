@@ -132,7 +132,7 @@ struct MainMessagesView: View {
 
     private var messagesView: some View {
         ScrollView {
-            ForEach(0..<10, id: \.self) { num in
+            ForEach(viewModel.recentMessages) { recentMessage in
                 // grouped entire message view minus the header in order to apply horizontal padding
                 
                 VStack {
@@ -140,23 +140,30 @@ struct MainMessagesView: View {
                         Text("Recent Messages Chat History View w/ Another User") // click on message in messageview it will take you to chat log view for user
                     } label: {
                         HStack(spacing: 16) {
-                            Image(systemName: "person.fill")
-                                .font(.system(size: 32))
-                                .padding(8)
-                                .overlay(RoundedRectangle(cornerRadius: 44)
-                                            .stroke(Color(.label), lineWidth: 1) // support dark and light mode
-                                )
-                            VStack(alignment: .leading) {
-                                Text("Username")
+                            WebImage(url: URL(string: recentMessage.profileImageURL))
+                                .resizable()
+                                .scaledToFill()
+                                .frame(width: 64, height:64)
+                                .clipped()
+                                .cornerRadius(64)
+                                .overlay(RoundedRectangle(cornerRadius: 64).stroke(Color.black, lineWidth: 1))
+                                .shadow(radius: 5)
+                            
+                            VStack(alignment: .leading, spacing: 8) {
+                                Text(recentMessage.username)
                                     .font(.system(size: 14, weight: .bold))
-                                Text("Message sent to user")
+                                    .foregroundColor(Color(.label))
+                                Text(recentMessage.text)
                                     .font(.system(size: 14))
-                                    .foregroundColor(Color(.lightGray))
+                                    .foregroundColor(Color(.darkGray))
+                                    .multilineTextAlignment(.leading)
                                             
                             }
                             Spacer()
-                            
-                            Text("22d")
+                            // TODO: format timezone
+                            // Should display time if sent or receieved on current day
+                            // else display date of last activity MM/DD/YY format
+                            Text(recentMessage.timestamp.description)
                                 .font(.system(size: 14, weight: .semibold))
                         }
                     }
@@ -209,6 +216,6 @@ struct MainMessagesView: View {
 
 struct MainMessagesView_Previews: PreviewProvider {
     static var previews: some View {
-        MainMessagesView()
+                MainMessagesView()
     }
 }

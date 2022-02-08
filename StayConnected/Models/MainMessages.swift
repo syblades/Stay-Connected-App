@@ -6,6 +6,8 @@
 //
 
 import Foundation
+import FirebaseFirestore
+import FirebaseFirestoreSwift
 
 class MainMessagesViewModel: ObservableObject {
     
@@ -21,8 +23,53 @@ class MainMessagesViewModel: ObservableObject {
             self.UserCurrentlyLoggedOut = FirebaseManager.shared.auth.currentUser?.uid == nil // checking if uid exists in the FireBase manager shared auth variable. if it's nil means user isnt logged in and UserCurrenlyLoggedOut evaluates to true
         }
         
-        
         fetchCurrentUser()
+        
+        fetchRecentMessages()
+    }
+    
+    @Published var recentMessages = [RecentMessage]()
+    
+    private func fetchRecentMessages () {
+        guard let uid = FirebaseManager.shared.auth.currentUser?.uid else { return }
+        
+        
+        FirebaseManager.shared.firestore
+            .collection("recent_messages")
+            .document(uid)
+            .collection("messages")
+            .order(by: "timestamp")
+            .addSnapshotListener { querySnapshot, error in
+                if let error = error {
+                    self.errorMessage = "Failed to listen for recent messages: \(error)"
+                    print(error)
+                    return
+                }
+                
+                querySnapshot?.documentChanges.forEach({ change in
+                    let docId = change.document.documentID
+                    
+                    // every new message saved in recent message node,
+                    // we remove from array if it already contains it and it will be appended
+                    
+                    if let index = self.recentMessages.firstIndex(where: { rm in
+                        return rm.id == docId
+                    }) {
+                        self.recentMessages.remove(at: index)
+                        
+                    }
+                    
+                    do {
+                        if let rm = try change.document.data(as: RecentMessage.self) {
+                            self.recentMessages.insert(rm, at: 0)
+                        }
+                    } catch {
+                        print(error)
+                    }
+                    
+                    
+                })
+            }
     }
     
     func fetchCurrentUser() {

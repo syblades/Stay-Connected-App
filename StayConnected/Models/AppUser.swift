@@ -11,13 +11,15 @@ struct AppUser: Identifiable {
     
     var id: String { uid } // getter syntax. For every Identifable need a variable
     
-    let username, uid, email, profileImageURL: String
+    let username, uid, email, profileImageURL, timestamp: String
     
     init(data: [String: Any]) {
         self.uid = data["uid"] as? String ?? ""
         self.email = data["email"] as? String ?? ""
         self.username = data["username"] as? String ?? ""
         self.profileImageURL = data["profileImageURL"] as? String ?? ""
+        self.timestamp = data["timestamp"] as? String ?? ""
+
     }
     
 }

@@ -17,6 +17,8 @@ struct FirebaseConstants {
     static let toId = "toId"
     static let text = "text"
     static let timestamp = "timestamp"
+    static let profileImageURL = "profileImageURL"
+    static let username = "username"
     
 }
 struct AppMessage:Identifiable {
@@ -109,6 +111,9 @@ class MessageLogViewModel: ObservableObject {
                 return
             }
             print("Hey sender, we have successfully saved your message!")
+            
+            self.persistRecentMessage()
+            
             self.messageText = "" // after the message is sent the textfield will clear out
             self.count += 1
         }
@@ -126,6 +131,61 @@ class MessageLogViewModel: ObservableObject {
             print("Hey recipient, we have successfully saved your message too!")
 
         }
+        
+    }
+    
+    private func persistRecentMessage() {
+        
+        guard let appUser = appUser else { return }
+        
+        guard let fromId = FirebaseManager.shared.auth.currentUser?.uid else { return }
+        
+        guard let toId = self.appUser?.uid else { return }
+        
+        let data = [
+            FirebaseConstants.timestamp: Timestamp(),
+            FirebaseConstants.text: self.messageText,
+            FirebaseConstants.fromId: fromId,
+            FirebaseConstants.toId: toId,
+            FirebaseConstants.profileImageURL: appUser.profileImageURL, // profile pic of message recipient
+            FirebaseConstants.username: appUser.username
+        ] as [String : Any]
+        
+        
+        let senderMessageDocument = FirebaseManager.shared.firestore
+            .collection("recent_messages")
+            .document(fromId)
+            .collection("messages") // collection of all docs that will show up in main message view
+            .document(toId)
+        
+        let recipientMessageDocument = FirebaseManager.shared.firestore
+            .collection("recent_messages")
+            .document(toId)
+            .collection(fromId) // collection of all docs that will show up in main message view
+            .document()
+        
+        
+        senderMessageDocument.setData(data) { error in
+            
+            if let error = error {
+                self.errorMessage = "Failed to save recent message: \(error)"
+                print("Failed to save recent message: \(error)")
+                return
+            }
+            
+            print("Hey sender, we have successfully saved your recent message!")
+        }
+        
+        recipientMessageDocument.setData(data) { error in
+            
+            if let error = error {
+                self.errorMessage = "Failed to save recent message: \(error)"
+                print("Failed to save recent message: \(error)")
+                return
+            }
+        }
+        print("Hey recipient, we have successfully saved your recent message too!")
+
     }
     
     @Published var count = 0

@@ -55,7 +55,7 @@ class MessageLogViewModel: ObservableObject {
         fetchMessages()
     }
     
-    private func fetchMessages() {
+    func fetchMessages() {
         guard let fromId = FirebaseManager.shared.auth.currentUser?.uid else { return }
         
         guard let toId = appUser?.uid else { return }

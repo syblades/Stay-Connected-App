@@ -17,11 +17,9 @@ class MainMessagesViewModel: ObservableObject {
     init() {
         
         // so there isnt any lag in presenting the cover
-        DispatchQueue.main.async {
             
             // if UserCurrentlyLoggedOut is true it will by default present the cover to the login view
             self.UserCurrentlyLoggedOut = FirebaseManager.shared.auth.currentUser?.uid == nil // checking if uid exists in the FireBase manager shared auth variable. if it's nil means user isnt logged in and UserCurrenlyLoggedOut evaluates to true
-        }
         
         fetchCurrentUser()
         
@@ -30,7 +28,7 @@ class MainMessagesViewModel: ObservableObject {
     
     @Published var recentMessages = [RecentMessage]()
     
-    private func fetchRecentMessages () {
+    func fetchRecentMessages () {
         guard let uid = FirebaseManager.shared.auth.currentUser?.uid else { return }
         
         

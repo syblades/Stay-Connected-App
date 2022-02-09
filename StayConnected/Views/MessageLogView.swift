@@ -30,11 +30,7 @@ struct MessageLogView: View {
         
         .navigationTitle(appUser?.username ?? "") // displays the users username at the top of the chat window
             .navigationBarTitleDisplayMode(.inline)
-//            .navigationBarItems(trailing: Button(action: {
-//                viewModel.count += 1
-//            }, label: {
-//                Text("Count: \(viewModel.count)")
-//            }))
+
     }
    
     static let emptyScroll = "Empty"

@@ -27,17 +27,29 @@ struct MainMessagesView: View {
     var body: some View {
         NavigationView {
             
-            VStack {
-                CustomNavigationBar
-                messagesView
+            if !viewModel.UserCurrentlyLoggedOut {
                 
-                NavigationLink("", isActive: $navigateToChatLogView) {
-                    MessageLogView(appUser: self.appUser)
-                }
-
-            }.overlay(
-               newMessageButton, alignment: .bottom)
-            .navigationBarHidden(true)
+                VStack {
+                    CustomNavigationBar
+                    messagesView
+                    
+                    NavigationLink("", isActive: $navigateToChatLogView) {
+                        MessageLogView(appUser: self.appUser)
+                    }
+                    
+                }.overlay(
+                    newMessageButton, alignment: .bottom)
+                    .navigationBarHidden(true)
+            } else {
+                LoginView(didFinishLogin: {
+                    self.viewModel.UserCurrentlyLoggedOut = false
+                    self.viewModel.fetchCurrentUser()
+                    self.viewModel.fetchRecentMessages()
+                })
+                
+                
+            }
+            
         }
                 
     }
@@ -122,10 +134,7 @@ struct MainMessagesView: View {
             
         }
         .fullScreenCover(isPresented: $viewModel.UserCurrentlyLoggedOut, onDismiss: nil){
-            LoginView(didFinishLogin: {
-                self.viewModel.UserCurrentlyLoggedOut = false
-                self.viewModel.fetchCurrentUser()
-            })
+            
         }
     }
     
@@ -160,10 +169,8 @@ struct MainMessagesView: View {
                                             
                             }
                             Spacer()
-                            // TODO: format timezone
-                            // Should display time if sent or receieved on current day
-                            // else display date of last activity MM/DD/YY format
-                            Text(recentMessage.timestamp.description)
+                         
+                            Text(recentMessage.timeElapsed)
                                 .font(.system(size: 14, weight: .semibold))
                         }
                     }

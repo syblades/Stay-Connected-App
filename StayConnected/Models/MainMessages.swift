@@ -13,24 +13,27 @@ class MainMessagesViewModel: ObservableObject {
     
     @Published var errorMessage = ""
     @Published var appUser: AppUser?
+    @Published var recentMessages = [RecentMessage]()
+    @Published var UserCurrentlyLoggedOut = false
+
+    
     
     init() {
         
-        // so there isnt any lag in presenting the cover
-        DispatchQueue.main.async {
             
-            // if UserCurrentlyLoggedOut is true it will by default present the cover to the login view
-            self.UserCurrentlyLoggedOut = FirebaseManager.shared.auth.currentUser?.uid == nil // checking if uid exists in the FireBase manager shared auth variable. if it's nil means user isnt logged in and UserCurrenlyLoggedOut evaluates to true
-        }
-        
+    // if UserCurrentlyLoggedOut is true it will by default present the cover to the login view
+    // checking if uid exists in the FireBase manager shared auth variable.
+    // if it's nil means user isnt logged in and UserCurrenlyLoggedOut evaluates to true
+    self.UserCurrentlyLoggedOut = FirebaseManager.shared.auth.currentUser?.uid == nil
+    
         fetchCurrentUser()
         
         fetchRecentMessages()
     }
     
-    @Published var recentMessages = [RecentMessage]()
     
-    private func fetchRecentMessages () {
+    
+    func fetchRecentMessages () {
         guard let uid = FirebaseManager.shared.auth.currentUser?.uid else { return }
         
         
@@ -100,9 +103,7 @@ class MainMessagesViewModel: ObservableObject {
 
         }
     }
-    
-    @Published var UserCurrentlyLoggedOut = false
-    
+        
     func handleLogOut() {
         UserCurrentlyLoggedOut.toggle()
         try? FirebaseManager.shared.auth.signOut() // signs user out of firestore db

@@ -22,7 +22,6 @@ struct LoginView: View {
     
    
     var body: some View {
-        NavigationView {
             ScrollView {
                 
                 VStack(spacing: 16) {
@@ -119,8 +118,7 @@ struct LoginView: View {
             .background(Color(.init(white: 0, alpha: 0.05))
                             .ignoresSafeArea()) // applies color to entire screen, previously it left out top
 
-        }
-        .navigationViewStyle(StackNavigationViewStyle())
+
         
         //view modifier
         .fullScreenCover(isPresented: $shouldShowImagePicker, onDismiss: nil) {

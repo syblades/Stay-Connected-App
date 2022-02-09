@@ -12,6 +12,9 @@ import FirebaseFirestore
 
 struct MessageLogView: View {
 
+    @ObservedObject var viewModel: MessageLogViewModel
+    static let emptyScroll = "Empty"
+
 
     let appUser: AppUser?
     
@@ -20,7 +23,7 @@ struct MessageLogView: View {
         self.viewModel = .init(appUser: appUser)
     }
         
-    @ObservedObject var viewModel: MessageLogViewModel
+    
     
     var body: some View {
         ZStack {
@@ -37,7 +40,6 @@ struct MessageLogView: View {
 //            }))
     }
    
-    static let emptyScroll = "Empty"
     private var messagesView: some View {
         VStack {
             ScrollView {

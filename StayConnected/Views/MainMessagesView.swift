@@ -24,6 +24,7 @@ struct MainMessagesView: View {
     @ObservedObject private var viewModel = MainMessagesViewModel()
     
     
+    
     var body: some View {
         NavigationView {
             
@@ -50,7 +51,7 @@ struct MainMessagesView: View {
                 
             }
             
-        }
+        }.navigationBarHidden(true)
                 
     }
     
@@ -145,35 +146,44 @@ struct MainMessagesView: View {
                 // grouped entire message view minus the header in order to apply horizontal padding
                 
                 VStack {
-                    NavigationLink {
-                        Text("Recent Messages Chat History View w/ Another User") // click on message in messageview it will take you to chat log view for user
-                    } label: {
-                        HStack(spacing: 16) {
-                            WebImage(url: URL(string: recentMessage.profileImageURL))
-                                .resizable()
-                                .scaledToFill()
-                                .frame(width: 64, height:64)
-                                .clipped()
-                                .cornerRadius(64)
-                                .overlay(RoundedRectangle(cornerRadius: 64).stroke(Color.black, lineWidth: 1))
-                                .shadow(radius: 5)
-                            
-                            VStack(alignment: .leading, spacing: 8) {
-                                Text(recentMessage.username)
-                                    .font(.system(size: 14, weight: .bold))
-                                    .foregroundColor(Color(.label))
-                                Text(recentMessage.text)
-                                    .font(.system(size: 14))
-                                    .foregroundColor(Color(.darkGray))
-                                    .multilineTextAlignment(.leading)
-                                            
+                    NavigationLink(destination: {
+                        MessageLogView(toId: recentMessage.toId)
+                        
+                    }, label: {
+                       
+                            HStack(spacing: 16) {
+                                WebImage(url: URL(string: recentMessage.profileImageURL))
+                                    .resizable()
+                                    .scaledToFill()
+                                    .frame(width: 64, height:64)
+                                    .clipped()
+                                    .cornerRadius(64)
+                                    .overlay(RoundedRectangle(cornerRadius: 64).stroke(Color.black, lineWidth: 1))
+                                    .shadow(radius: 5)
+                                
+                                VStack(alignment: .leading, spacing: 8) {
+                                    Text(recentMessage.username)
+                                        .font(.system(size: 14, weight: .bold))
+                                        .foregroundColor(Color(.label))
+                                    Text(recentMessage.text)
+                                        .font(.system(size: 14))
+                                        .foregroundColor(Color(.darkGray))
+                                        .multilineTextAlignment(.leading)
+                                                
+                                }
+                                Spacer()
+                             
+                                Text(recentMessage.timeElapsed)
+                                    .font(.system(size: 14, weight: .semibold))
                             }
-                            Spacer()
-                         
-                            Text(recentMessage.timeElapsed)
-                                .font(.system(size: 14, weight: .semibold))
-                        }
-                    }
+                        
+
+                    })
+//                        navigateToChatLogView.toggle()
+//                        self.viewModel.fetchCurrentUser()
+//                        self.viewModel.fetchRecentMessages()
+                        // click on message in messageview it will take you to chat log view for user
+                  
 
                     
                     Divider()

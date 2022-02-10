@@ -13,14 +13,24 @@ import FirebaseFirestore
 struct MessageLogView: View {
 
 
-    let appUser: AppUser?
+    var appUser: AppUser?
+    var toId: String?
+    
+    @ObservedObject var viewModel: MessageLogViewModel
+    
     
     init(appUser: AppUser?) {
         self.appUser = appUser
         self.viewModel = .init(appUser: appUser)
     }
+    
+    
+    init(toId: String?) {
+        self.toId = toId
+        self.viewModel = .init(toId: toId)
+
+    }
         
-    @ObservedObject var viewModel: MessageLogViewModel
     
     var body: some View {
         ZStack {
@@ -28,13 +38,13 @@ struct MessageLogView: View {
             Text(viewModel.errorMessage)
         }
         
-        .navigationTitle(appUser?.username ?? "") // displays the users username at the top of the chat window
+        .navigationTitle(viewModel.appUser?.username ?? "") // displays the users username at the top of the chat window
             .navigationBarTitleDisplayMode(.inline)
 
     }
    
     static let emptyScroll = "Empty"
-    private var messagesView: some View {
+     var messagesView: some View {
         VStack {
             ScrollView {
                 ScrollViewReader { scrollViewProxy in
@@ -47,9 +57,9 @@ struct MessageLogView: View {
                         .id(Self.emptyScroll)
                     }
                     .onReceive(viewModel.$count) { _ in
-                        withAnimation(.easeOut(duration: 0.5)) {
+//                        withAnimation(.easeOut(duration: 0.5)) {
                             scrollViewProxy.scrollTo(Self.emptyScroll, anchor: .bottom)
-                        }
+//                        }
                     }
 
                     
@@ -152,14 +162,14 @@ private struct DescriptionPlaceholder: View {
     }
 }
 
-struct MessageLogView_Previews: PreviewProvider {
-    static var previews: some View {
-        MainMessagesView()
-//        MessageLogView(appUser: .init(data: ["username" : "syblades"]))
-//        NavigationView {
-//            MessageLogView(appUser: .init(data: ["username" : "syblades"]))
-        //        }
-
-    }
-
-}
+//struct MessageLogView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        MainMessagesView()
+////        MessageLogView(appUser: .init(data: ["username" : "syblades"]))
+////        NavigationView {
+////            MessageLogView(appUser: .init(data: ["username" : "syblades"]))
+//        //        }
+//
+//    }
+//
+//}

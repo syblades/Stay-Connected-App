@@ -2,7 +2,8 @@
 //  ImagePicker.swift
 //  StayConnected
 //
-//  Created by Symone Blades on 1/30/22.
+// Created by Symone Blades on 1/30/22.
+// Credit: This Image Picker is from LBTA tutorial
 //
 
 import SwiftUI

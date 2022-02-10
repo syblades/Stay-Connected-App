@@ -46,16 +46,45 @@ class MessageLogViewModel: ObservableObject {
     
     @Published var appMessages = [AppMessage]()
     
-    let appUser: AppUser?
+    var appUser: AppUser?
+    
+    var toId: String?
+    
+    
+    init(toId: String?) {
+        self.toId = toId
+        fetchUser { [weak self] in // capture self weakly 'in' seperates parameter
+        self?.fetchMessages() // capture self in anon
+            
+        }
+    }
     
     
     init(appUser: AppUser?) {
         self.appUser = appUser
-        
         fetchMessages()
     }
     
-    func fetchMessages() {
+    
+    private func fetchUser(completion: @escaping () -> ()) {
+        FirebaseManager.shared.firestore.collection("users").document(toId!)
+            .getDocument { documentSnapshot, error in
+                if let error = error {
+                    self.errorMessage = "Failed to fetch user: \(error)"
+                    print("Failed to fetch user: \(error)")
+                    return
+                }
+                if let snapshot = documentSnapshot {
+                    
+                    let data = snapshot.data()
+                    self.appUser = AppUser(data: data!)
+                    completion()
+                }
+            }
+    }
+    
+    
+    private func fetchMessages() {
         guard let fromId = FirebaseManager.shared.auth.currentUser?.uid else { return }
         
         guard let toId = appUser?.uid else { return }
@@ -161,8 +190,9 @@ class MessageLogViewModel: ObservableObject {
         let recipientMessageDocument = FirebaseManager.shared.firestore
             .collection("recent_messages")
             .document(toId)
-            .collection(fromId) // collection of all docs that will show up in main message view
-            .document()
+            .collection("messages")
+            .document(fromId) // collection of all docs that will show up in main message view
+          
         
         
         senderMessageDocument.setData(data) { error in

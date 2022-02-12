@@ -16,17 +16,20 @@ struct LoginView: View {
     @State private var isLoginMode = false
     @State private var email = ""
     @State private var password = ""
-    @State private var username = ""
+    @State  var username = ""
     
     @State private var shouldShowImagePicker = false
     
    
     var body: some View {
-        NavigationView {
+        
+        
+            
             ScrollView {
-                
+               
                 VStack(spacing: 16) {
-                    // sets create account and login option at tope of view
+                    
+                    // sets create account and login option at top of view
                     Picker(selection: $isLoginMode, label: Text("Picker here")) {
                         Text("Login")
                             .tag(true)
@@ -34,6 +37,14 @@ struct LoginView: View {
                         Text("Create Account")
                             .tag(false)
                     }.pickerStyle(SegmentedPickerStyle())
+                        
+                        .overlay(RoundedRectangle(cornerRadius: 13)
+                                    .stroke(Color.black, lineWidth: 2))
+                       
+ 
+                        
+                        .padding()
+                        
 
                     
                     // if they are creating an account this icon will appear
@@ -57,7 +68,7 @@ struct LoginView: View {
                                     Image(systemName: "person.fill")
                                         .font(.system(size: 64))
                                         .padding()
-                                        .foregroundColor(Color(.label)) // white in dark mode, black in light mode
+                                        .foregroundColor(Color(.black))
                                 }
                             }
                             
@@ -65,7 +76,7 @@ struct LoginView: View {
                             .overlay(RoundedRectangle(cornerRadius: 64)
                                         .stroke(Color.black, lineWidth: 3))
 
-                        
+                            .padding()
                         }
                         
                         
@@ -73,10 +84,11 @@ struct LoginView: View {
                         TextField("Username", text: $username)
                             .keyboardType(.default)
                             .autocapitalization(.none)
-                            .padding(12)
+                            
+                            .padding(16)
                             .background(Color.white)
                     }
-                    
+                       
 
                     
                     // allows me to apply padding and background setting to multiple instances using the 'Group' type
@@ -89,8 +101,9 @@ struct LoginView: View {
                         // 'SecureField' creates a 'mask' so password isnt visible when user enters
                         SecureField("Password", text: $password)
                     }
-                    .padding(12)
+                    .padding(16)
                     .background(Color.white)
+                    Spacer()
  
                     
                     // Create Account OR Login Button
@@ -102,9 +115,12 @@ struct LoginView: View {
                             Text(isLoginMode ? "Log In" : "Create Account") // logic to update button based on which option is selected
                                 .foregroundColor(.white)
                                 .padding(.vertical, 10)
+                                
                                 .font(.system(size: 18, weight:.semibold))
                             Spacer()
-                        }.background(Color.blue)
+                        }.background(Color.black)
+                            .cornerRadius(30)
+                            .padding()
                     }
                     
                     // displays successfully created user or user already exists message under 'Create Account' button
@@ -115,12 +131,17 @@ struct LoginView: View {
             }
             // checking if isLoginMode true meaning if the picker in the nav bar is set to 'Login' else it means it's set to Create Account
             // changes the nav header
-            .navigationTitle(isLoginMode ? "Login" : "Create Your Account")
-            .background(Color(.init(white: 0, alpha: 0.05))
+            .navigationTitle(isLoginMode ? "Login" : "Create Account")
+            .padding(.top, 8)
+//            .padding(.bottom, 10)
+            
+            
+            .background(LinearGradient(gradient: Gradient(colors: [.purple, .blue, .black]), startPoint: .topLeading, endPoint: .bottomTrailing)
                             .ignoresSafeArea()) // applies color to entire screen, previously it left out top
 
-        }
-        .navigationViewStyle(StackNavigationViewStyle())
+        
+       
+        
         
         //view modifier
         .fullScreenCover(isPresented: $shouldShowImagePicker, onDismiss: nil) {
@@ -211,7 +232,7 @@ struct LoginView: View {
         }
     }
     
-    private func storeUserInfo(imageProfileUrl: URL) {
+    func storeUserInfo(imageProfileUrl: URL) {
         guard let uid = FirebaseManager.shared.auth.currentUser?.uid else { return }
         
         // creating dictionary to establish what data we are saving from the user

@@ -7,11 +7,13 @@
 
 import SwiftUI
 
-
+//setdata func
 
 struct ProfileSettingsView: View {
     @Environment(\.presentationMode) var presentationMode
-
+    
+    @State var username = ""
+    @State var updatedUsername = ""
     
     // had to set initial value of background in order to change
     init(){
@@ -22,15 +24,27 @@ struct ProfileSettingsView: View {
             VStack {
                 Form {
                     DarkModeView()
-                    Text("Update Username")
-                    Text("Update Password")
-                    Text("DELETE ACCOUNT")
-                        .foregroundColor(Color.red)
+                    TextField("Update Username", text: $updatedUsername)
+                    Button(action: {
+                        //func pass uid and updateusername
+                        username = updatedUsername
+                    }) {
+                        Text("Save")
+                        
+                    }
+
+                        
+                        
+//                    Text("Update Password")
+//                    Text("DELETE ACCOUNT")
+//                        .foregroundColor(Color.red)
                 }.font(.system(size: 18, weight: .semibold))
                 .navigationTitle("User Settings")
             }
 
     }
+    
+    
         
 }
     

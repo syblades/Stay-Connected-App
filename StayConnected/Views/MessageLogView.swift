@@ -30,6 +30,7 @@ struct MessageLogView: View {
         self.viewModel = .init(toId: toId)
 
     }
+    
         
     
     var body: some View {
@@ -38,7 +39,7 @@ struct MessageLogView: View {
             Text(viewModel.errorMessage)
         }
         
-        .navigationTitle(viewModel.appUser?.username ?? "") // displays the users username at the top of the chat window
+        .navigationTitle("\(viewModel.appUser?.username ?? "")") // displays the users username at the top of the chat window
             .navigationBarTitleDisplayMode(.inline)
 
     }

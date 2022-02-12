@@ -32,6 +32,8 @@ struct MainMessagesView: View {
                 
                 VStack {
                     CustomNavigationBar
+                    
+                    .padding()
                     messagesView
                     
                     NavigationLink("", isActive: $navigateToChatLogView) {
@@ -51,7 +53,8 @@ struct MainMessagesView: View {
                 
             }
             
-        }.navigationBarHidden(true)
+        }
+//        .navigationBarHidden(true)
                 
     }
     
@@ -64,18 +67,21 @@ struct MainMessagesView: View {
             WebImage(url: URL(string: viewModel.appUser?.profileImageURL ?? ""))
                 .resizable()
                 .scaledToFill()
-                .frame(width: 50, height: 50)
+                .frame(width: 64, height:64)
                 .clipped()
-                .cornerRadius(50)
-                .overlay(RoundedRectangle(cornerRadius: 44)
-                            .stroke(Color(.label), lineWidth: 1)
-                )
+                .cornerRadius(64)
+                .overlay(RoundedRectangle(cornerRadius: 64).stroke(Color.black, lineWidth: 1))
                 .shadow(radius: 5)
+                
             
+////
+           
 
+            
             VStack(alignment: .leading, spacing: 4) {
-                Text(" \(viewModel.appUser?.username ?? "")")
+                Text("\(viewModel.greetingLogic())") // time specific greeting for user
                     .font(.system(size: 24, weight: .bold))
+                    
                 HStack {
                     Circle()
                         .foregroundColor(.green)
@@ -85,7 +91,7 @@ struct MainMessagesView: View {
                         .foregroundColor(Color(.lightGray))
                 }
                 
-            }
+            }.padding(.bottom)
         
             Spacer()
             

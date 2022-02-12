@@ -26,6 +26,30 @@ class MainMessagesViewModel: ObservableObject {
         fetchRecentMessages()
     }
     
+    func greetingLogic() -> String {
+        let hour = Calendar.current.component(.hour, from: Date())
+
+        let NEW_DAY = 0
+        let NOON = 12
+        let SUNSET = 18
+        let MIDNIGHT = 24
+
+        var greetingText = ("Hello, \(appUser?.username ?? "")👋🏾") // Default greeting text
+        switch hour {
+        case NEW_DAY..<NOON:
+            greetingText = ("Good Morning, \(appUser?.username ?? "")☀️")
+        case NOON..<SUNSET:
+            greetingText = ("Good Afternoon, \(appUser?.username ?? "")☺️")
+        case SUNSET..<MIDNIGHT:
+            greetingText = ("Good Evening, \(appUser?.username ?? "")🌙")
+        
+        default:
+            _ = ("Hello, \(appUser?.username ?? "")👋🏾")
+        }
+        return greetingText
+
+      }
+    
     @Published var recentMessages = [RecentMessage]()
     
     func fetchRecentMessages () {

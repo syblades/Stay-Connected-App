@@ -6,6 +6,8 @@
 //
 
 import Foundation
+import FirebaseFirestore
+
 
 struct AppUser: Identifiable {
     
@@ -23,3 +25,12 @@ struct AppUser: Identifiable {
     }
     
 }
+ 
+
+
+
+//if let error = error {
+//    self.errorMessage = "Failed to listen for recent messages: \(error)"
+//    print(error)
+//    return
+//}

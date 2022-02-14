@@ -54,7 +54,7 @@ struct NewMessageView: View {
         NavigationView {
             ScrollView{
                 Text(viewModel.errorMessage)
-                Text("SEARCH BAR WILL GO HERE")
+//                Text("SEARCH BAR WILL GO HERE")
                 // on this line implement search bar functionality
                 ForEach(viewModel.users) { user in
                     
@@ -70,18 +70,28 @@ struct NewMessageView: View {
                                 .frame(width: 50, height: 50)
                                 .clipped() // clips off edges outside of frame
                                 .cornerRadius(50)
-                                .overlay(RoundedRectangle(cornerRadius: 50).stroke(Color(.label), lineWidth: 2))
+                                .overlay(RoundedRectangle(cornerRadius: 50).stroke(Color(.black), lineWidth: 2))
                             Text(user.username)
-                                .foregroundColor(Color(.label))
+                                .foregroundColor(Color(.black))
                             Spacer()
-
                         }.padding(.horizontal)
                         
                     }
                     Divider()
-                        .padding(.vertical, 8)
+                        .frame(height: 0.5)
+                        .background(Color(.white))
+                    
+                
+                    
+                    
                 }
-            }.navigationTitle("New Message")
+                .padding(.horizontal)
+                
+            }.navigationTitle("New Message 💬")
+            
+              
+                .background(LinearGradient(gradient: Gradient(colors: [.purple, .blue, .black]), startPoint: .topLeading, endPoint: .bottomTrailing)
+                                .ignoresSafeArea())
                 .toolbar {
                     ToolbarItemGroup(placement:
                         .navigationBarLeading) {

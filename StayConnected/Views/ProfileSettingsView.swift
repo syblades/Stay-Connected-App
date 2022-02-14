@@ -40,7 +40,8 @@ struct ProfileSettingsView: View {
 //                        .foregroundColor(Color.red)
                 }.font(.system(size: 18, weight: .semibold))
                 .navigationTitle("User Settings")
-            }
+            } .background(LinearGradient(gradient: Gradient(colors: [.purple, .blue, .black]), startPoint: .topLeading, endPoint: .bottomTrailing)
+                            .ignoresSafeArea()) // applies color to entire screen, previously it left out top
 
     }
     

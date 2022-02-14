@@ -41,6 +41,7 @@ struct MessageLogView: View {
         
         .navigationTitle("\(viewModel.appUser?.username ?? "")") // displays the users username at the top of the chat window
             .navigationBarTitleDisplayMode(.inline)
+        
 
     }
    
@@ -67,10 +68,12 @@ struct MessageLogView: View {
                 }
                 
             }
-            .background(Color(.init(white: 0.95, alpha: 1)))
+            .background(LinearGradient(gradient: Gradient(colors: [.purple, .blue, .black]), startPoint: .topLeading, endPoint: .bottomTrailing)
+                            .ignoresSafeArea()) // applies color to entire screen, previously it left out top
+//            .background(Color(.init(white: 0.95, alpha: 1)))
             .safeAreaInset(edge: .bottom) {
                 messageBottomArea
-                    .background(Color(.systemBackground).ignoresSafeArea())
+                    .background(Color(.black).ignoresSafeArea())
             }
         }
 
@@ -83,14 +86,16 @@ struct MessageLogView: View {
             
             Image(systemName: "photo.on.rectangle.angled")
                 .font(.system(size: 24))
-                .foregroundColor(Color(.label))
+                .foregroundColor(Color(.white))
             
             ZStack {
                 DescriptionPlaceholder()
                 TextEditor(text: $viewModel.messageText) // have to use viewmodel since messageText is a published variable
-                    .opacity(viewModel.messageText.isEmpty ? 0.5: 1)
+                    .opacity(viewModel.messageText.isEmpty ? 0.5: 2)
+                
+                
             }
-            .frame(height: 60)
+            .frame(height: 50)
             
             Button {
                 viewModel.handleSend()
@@ -101,7 +106,7 @@ struct MessageLogView: View {
             }
             .padding(.horizontal)
             .padding(.vertical, 8)
-            .background(Color.blue)
+            .background(Color.green)
             .cornerRadius(4)
 
         }
@@ -123,10 +128,10 @@ struct MessageView: View {
                     Spacer()
                     HStack {
                         Text(message.text)
-                            .foregroundColor(.white)
+                            .foregroundColor(Color(.white))
                     }
                     .padding()
-                    .background(Color.blue)
+                    .background(Color.black)
                     .cornerRadius(8)
                 }
             
@@ -134,10 +139,10 @@ struct MessageView: View {
                 HStack {
                     HStack {
                         Text(message.text)
-                            .foregroundColor(Color(.label))
+                            .foregroundColor(Color(.black))
                     }
                     .padding()
-                    .background(Color.green)
+                    .background(Color.white)
                     .cornerRadius(8)
                     Spacer()
                 }
@@ -154,10 +159,10 @@ private struct DescriptionPlaceholder: View {
     var body: some View {
         HStack {
             Text("What's on Your Mind?")
-                .foregroundColor(Color(.gray))
+                .foregroundColor(Color(.white))
                 .font(.system(size: 17))
                 .padding(.leading, 5)
-                .padding(.top, -4)
+                .padding(.top, -2)
             Spacer()
         }
     }

@@ -33,6 +33,8 @@ class MainMessagesViewModel: ObservableObject {
         let NOON = 12
         let SUNSET = 18
         let MIDNIGHT = 24
+        
+    
 
         var greetingText = ("Hello, \(appUser?.username ?? "")👋🏾") // Default greeting text
         switch hour {

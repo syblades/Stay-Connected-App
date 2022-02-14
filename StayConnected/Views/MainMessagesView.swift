@@ -32,9 +32,12 @@ struct MainMessagesView: View {
                 
                 VStack {
                     CustomNavigationBar
+//                        .background(LinearGradient(gradient: Gradient(colors: [.purple, .blue, .black]), startPoint: .topLeading, endPoint: .bottomTrailing)
+//                                        .ignoresSafeArea())
                     
                     .padding()
                     messagesView
+                        
                     
                     NavigationLink("", isActive: $navigateToChatLogView) {
                         MessageLogView(appUser: self.appUser)
@@ -42,7 +45,10 @@ struct MainMessagesView: View {
                     
                 }.overlay(
                     newMessageButton, alignment: .bottom)
+                
                     .navigationBarHidden(true)
+                    .background(LinearGradient(gradient: Gradient(colors: [.purple, .blue, .black]), startPoint: .topLeading, endPoint: .bottomTrailing)
+                                    .ignoresSafeArea())
             } else {
                 LoginView(didFinishLogin: {
                     self.viewModel.UserCurrentlyLoggedOut = false
@@ -81,6 +87,8 @@ struct MainMessagesView: View {
             VStack(alignment: .leading, spacing: 4) {
                 Text("\(viewModel.greetingLogic())") // time specific greeting for user
                     .font(.system(size: 24, weight: .bold))
+                    .foregroundColor(Color(.black))
+                    
                     
                 HStack {
                     Circle()
@@ -88,10 +96,10 @@ struct MainMessagesView: View {
                         .frame(width: 14, height: 14)
                     Text("online")
                         .font(.system(size: 14))
-                        .foregroundColor(Color(.lightGray))
+                        .foregroundColor(Color(.white))
                 }
                 
-            }.padding(.bottom)
+            }
         
             Spacer()
             
@@ -121,7 +129,7 @@ struct MainMessagesView: View {
                 Text("")
                 Image(systemName: "gearshape.fill")
                 .font(.system(size: 24, weight: .bold))
-                .foregroundColor(Color(.label))
+                .foregroundColor(Color(.black))
             }
            
         }
@@ -169,11 +177,11 @@ struct MainMessagesView: View {
                                 
                                 VStack(alignment: .leading, spacing: 8) {
                                     Text(recentMessage.username)
-                                        .font(.system(size: 14, weight: .bold))
-                                        .foregroundColor(Color(.label))
+                                        .font(.system(size: 18, weight: .bold))
+                                        .foregroundColor(Color(.black))
                                     Text(recentMessage.text)
                                         .font(.system(size: 14))
-                                        .foregroundColor(Color(.darkGray))
+                                        .foregroundColor(Color(.white))
                                         .multilineTextAlignment(.leading)
                                                 
                                 }
@@ -181,6 +189,7 @@ struct MainMessagesView: View {
                              
                                 Text(recentMessage.timeElapsed)
                                     .font(.system(size: 14, weight: .semibold))
+                                    .foregroundColor(Color(.yellow))
                             }
                         
 
@@ -193,8 +202,12 @@ struct MainMessagesView: View {
 
                     
                     Divider()
-                        .padding(.vertical, 8)
+                        .frame(height: 0.5)
+                        .background(Color(.white))
+                     
+                
                 }.padding(.horizontal)
+                .padding(.vertical, 4)
                 
             }.padding(.bottom, 50)
             
@@ -211,13 +224,13 @@ struct MainMessagesView: View {
             HStack {
                 Spacer()
                 Text("+ New Message")
-                    .font(.system(size: 16, weight:.bold))
+                    .font(.system(size: 18, weight:.bold))
                 Spacer()
                 
             }
             .foregroundColor(.white)
             .padding(.vertical)
-                .background(Color.indigo)
+            .background(Color.black)
                 .cornerRadius(32)
                 .padding(.horizontal)
                 .shadow(radius: 15)
@@ -229,6 +242,7 @@ struct MainMessagesView: View {
                 self.navigateToChatLogView.toggle()
                 self.appUser = user // what user we selected
             })
+            
         }
     }
     

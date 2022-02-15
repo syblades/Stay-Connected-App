@@ -58,9 +58,7 @@ struct NewMessageView: View {
         NavigationView {
                     
             VStack {
-                
 
-                Text("New Message 💬")
                 SearchBarView(searchText: $searchText)
                     .padding(.top)
                 
@@ -92,7 +90,8 @@ struct NewMessageView: View {
         
         
                        
-        } .background(LinearGradient(gradient: Gradient(colors: [.purple, .blue, .black]), startPoint: .topLeading, endPoint: .bottomTrailing)
+            }.navigationTitle("New Message 💬")
+            .background(LinearGradient(gradient: Gradient(colors: [.purple, .blue, .black]), startPoint: .topLeading, endPoint: .bottomTrailing)
                         .ignoresSafeArea())
         .toolbar {
             ToolbarItemGroup(placement:
@@ -100,7 +99,7 @@ struct NewMessageView: View {
                 Button {
                     presentationMode.wrappedValue.dismiss()
                 } label : {
-                    Text("< Back")
+                    Text("Cancel")
                 }
             }
 

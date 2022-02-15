@@ -139,7 +139,7 @@ struct MessageView: View {
                 HStack {
                     HStack {
                         Text(message.text)
-                            .foregroundColor(Color(.black))
+                            .foregroundColor(Color(.systemGray6))
                     }
                     .padding()
                     .background(Color.white)

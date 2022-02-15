@@ -81,19 +81,22 @@ struct LoginView: View {
                         
                         
                         
+                            
                         TextField("Username", text: $username)
                             .keyboardType(.default)
                             .autocapitalization(.none)
-                            
                             .padding(16)
-                            .background(Color.white)
+                            .foregroundColor(Color(.black))
+                            .background(Color(.white))
                     }
                        
 
+
                     
                     // allows me to apply padding and background setting to multiple instances using the 'Group' type
-                    
+
                     Group {
+                                                
                         TextField("Email", text: $email)
                             .keyboardType(.emailAddress)
                             .autocapitalization(.none)
@@ -102,7 +105,8 @@ struct LoginView: View {
                         SecureField("Password", text: $password)
                     }
                     .padding(16)
-                    .background(Color.white)
+                    .foregroundColor(Color(.black))
+                    .background(Color(.white))
                     Spacer()
  
                     

@@ -100,7 +100,6 @@ struct MainMessagesView: View {
                 }
                 
             }
-        
             Spacer()
             
 

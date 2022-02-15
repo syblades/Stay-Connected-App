@@ -47,68 +47,129 @@ struct NewMessageView: View {
     // creating a callback
     let selectedNewUser: (AppUser) -> ()
     
+    @State private var searchText = ""
+    
     @Environment(\.presentationMode) var presentationMode
     @ObservedObject var viewModel = NewMessageViewModel()
     
+    
     var body: some View {
+        
         NavigationView {
-            ScrollView{
-                Text(viewModel.errorMessage)
-//                Text("SEARCH BAR WILL GO HERE")
-                // on this line implement search bar functionality
-                ForEach(viewModel.users) { user in
                     
-                    Button {
-                        presentationMode.wrappedValue.dismiss()
-                        selectedNewUser(user)
+            VStack {
+                
 
-                    } label: {
-                        HStack(spacing: 16) {
-                            WebImage(url: URL(string:user.profileImageURL))
-                                .resizable()
-                                .scaledToFill()
-                                .frame(width: 50, height: 50)
-                                .clipped() // clips off edges outside of frame
-                                .cornerRadius(50)
-                                .overlay(RoundedRectangle(cornerRadius: 50).stroke(Color(.black), lineWidth: 2))
-                            Text(user.username)
-                                .foregroundColor(Color(.black))
-                            Spacer()
-                        }.padding(.horizontal)
-                        
-                    }
-                    Divider()
-                        .frame(height: 0.5)
-                        .background(Color(.white))
-                    
+                Text("New Message 💬")
+                SearchBarView(searchText: $searchText)
+                    .padding(.top)
                 
-                    
-                    
-                }
-                .padding(.horizontal)
-                
-            }.navigationTitle("New Message 💬")
-            
-              
-                .background(LinearGradient(gradient: Gradient(colors: [.purple, .blue, .black]), startPoint: .topLeading, endPoint: .bottomTrailing)
-                                .ignoresSafeArea())
-                .toolbar {
-                    ToolbarItemGroup(placement:
-                        .navigationBarLeading) {
-                        Button {
+                List(self.viewModel.users.filter(
+                    { searchText.isEmpty ? true : $0.username.localizedCaseInsensitiveContains(searchText) }
+                )) { user in
+//                    Text(user.username)
+                    Button {
                             presentationMode.wrappedValue.dismiss()
-                        } label : {
-                            Text("Cancel")
+                            selectedNewUser(user)
+    
+                        } label: {
+                            HStack(spacing: 16) {
+                                WebImage(url: URL(string:user.profileImageURL))
+                                    .resizable()
+                                    .scaledToFill()
+                                    .frame(width: 50, height: 50)
+                                    .clipped() // clips off edges outside of frame
+                                    .cornerRadius(50)
+                                    .overlay(RoundedRectangle(cornerRadius: 50).stroke(Color(.black), lineWidth: 2))
+                                Text(user.username)
+                                    .foregroundColor(Color(.white))
+                                Spacer()
+                            }.padding(.horizontal)
+    
                         }
-                    }
-                                           
+                        
                 }
+        
+        
+                       
+        } .background(LinearGradient(gradient: Gradient(colors: [.purple, .blue, .black]), startPoint: .topLeading, endPoint: .bottomTrailing)
+                        .ignoresSafeArea())
+        .toolbar {
+            ToolbarItemGroup(placement:
+                .navigationBarLeading) {
+                Button {
+                    presentationMode.wrappedValue.dismiss()
+                } label : {
+                    Text("< Back")
+                }
+            }
+
         }
     }
 }
+    
+        
+        
+//        NavigationView {
+//            ScrollView{
+//                Text(viewModel.errorMessage)
+////                Text("SEARCH BAR WILL GO HERE")
+//                // on this line implement search bar functionality
+//                ForEach(viewModel.users) { user in
+//
+//                    Button {
+//                        presentationMode.wrappedValue.dismiss()
+//                        selectedNewUser(user)
+//
+//                    } label: {
+//                        HStack(spacing: 16) {
+//                            WebImage(url: URL(string:user.profileImageURL))
+//                                .resizable()
+//                                .scaledToFill()
+//                                .frame(width: 50, height: 50)
+//                                .clipped() // clips off edges outside of frame
+//                                .cornerRadius(50)
+//                                .overlay(RoundedRectangle(cornerRadius: 50).stroke(Color(.black), lineWidth: 2))
+//                            Text(user.username)
+//                                .foregroundColor(Color(.black))
+//                            Spacer()
+//                        }.padding(.horizontal)
+//
+//                    }
+//
+//
+//
+//
+//
+//                }
+//                .padding(.horizontal)
+//
+//            }
+//
+//
+//            .navigationTitle("New Message 💬")                                .foregroundColor(Color(.black))
+//
+//
+//                .background(LinearGradient(gradient: Gradient(colors: [.purple, .blue, .black]), startPoint: .topLeading, endPoint: .bottomTrailing)
+//                                .ignoresSafeArea())
+//                .toolbar {
+//                    ToolbarItemGroup(placement:
+//                        .navigationBarLeading) {
+//                        Button {
+//                            presentationMode.wrappedValue.dismiss()
+//                        } label : {
+//                            Text("Cancel")
+//                        }
+//                    }
+//
+//                }
+//        }
+//    }
+//}
  
-struct NewMessageView_Previews: PreviewProvider {
-    static var previews: some View {
-        MainMessagesView()
-    }
+//struct NewMessageView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        MainMessagesView()
+//    }
+//}
 }

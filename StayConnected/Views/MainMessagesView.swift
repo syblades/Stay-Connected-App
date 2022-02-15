@@ -106,24 +106,9 @@ struct MainMessagesView: View {
             
            
         VStack {
-            NavigationLink {
-                ProfileSettingsView()
-                Button {
-                    shouldShowLogOutOptions.toggle()
-                } label: {
-                    Spacer()
-                    Text("Log Out")
-                        .font(.system(size: 20, weight:.bold))
-                    Spacer()
-
-                }
-                .foregroundColor(.white)
-                .padding(.vertical)
-                .background(Color.blue)
-                .cornerRadius(32)
-                .padding(.horizontal)
-                .shadow(radius: 15)
-
+         
+            Button {
+                shouldShowLogOutOptions.toggle()
             } label: {
                 Text("")
                 Image(systemName: "gearshape.fill")
@@ -178,7 +163,7 @@ struct MainMessagesView: View {
                                     Text(recentMessage.username)
                                         .font(.system(size: 18, weight: .bold))
                                         .foregroundColor(Color(.black))
-                                    Text(recentMessage.text)
+                                    Text(recentMessage.shortText())
                                         .font(.system(size: 14))
                                         .foregroundColor(Color(.white))
                                         .multilineTextAlignment(.leading)

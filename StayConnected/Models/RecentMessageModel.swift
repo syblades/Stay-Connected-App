@@ -18,11 +18,20 @@ struct RecentMessage : Codable, Identifiable {
     let fromId, toId: String
     let profileImageURL: String
     let timestamp: Date
+   
     
     var timeElapsed: String {
         let formatter = RelativeDateTimeFormatter()
         formatter.unitsStyle = .abbreviated
         return formatter.localizedString(for: timestamp, relativeTo: Date())
     }
-    
+   
+    func shortText () -> String {
+        let kMaxCount = 40
+        if text.count < kMaxCount {
+            return text
+        } else {
+            return "\(text.prefix(kMaxCount))..."
+        }
+    }
 }

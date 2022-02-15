@@ -145,8 +145,7 @@ class MessageLogViewModel: ObservableObject {
             
             self.persistRecentMessage()
             
-            self.messageText = "" // after the message is sent the textfield will clear out
-            self.count += 1
+            
         }
         
         let recipientMessageDocument = FirebaseManager.shared.firestore.collection("messages") // collection stores all messages between users (message log view)
@@ -171,53 +170,93 @@ class MessageLogViewModel: ObservableObject {
         
         guard let fromId = FirebaseManager.shared.auth.currentUser?.uid else { return }
         
-        guard let toId = self.appUser?.uid else { return }
-        
-        let data = [
-            FirebaseConstants.timestamp: Timestamp(),
-            FirebaseConstants.text: self.messageText,
-            FirebaseConstants.fromId: fromId,
-            FirebaseConstants.toId: toId,
-            FirebaseConstants.profileImageURL: appUser.profileImageURL, // profile pic of message recipient
-            FirebaseConstants.username: appUser.username
-        ] as [String : Any]
-        
-        
-        let senderMessageDocument = FirebaseManager.shared.firestore
-            .collection("recent_messages")
-            .document(fromId)
-            .collection("messages") // collection of all docs that will show up in main message view
-            .document(toId)
-        
-        let recipientMessageDocument = FirebaseManager.shared.firestore
-            .collection("recent_messages")
-            .document(toId)
-            .collection("messages")
-            .document(fromId) // collection of all docs that will show up in main message view
-          
-        
-        
-        senderMessageDocument.setData(data) { error in
+        fetchCurrentUser(uid: fromId) { currentUser in
             
-            if let error = error {
-                self.errorMessage = "Failed to save recent message: \(error)"
-                print("Failed to save recent message: \(error)")
-                return
+            guard let toId = self.appUser?.uid else { return }
+            
+            let data = [
+                FirebaseConstants.timestamp: Timestamp(),
+                FirebaseConstants.text: self.messageText,
+                FirebaseConstants.fromId: fromId,
+                FirebaseConstants.toId: toId,
+                FirebaseConstants.profileImageURL: appUser.profileImageURL, // profile pic of message recipient
+                FirebaseConstants.username: appUser.username
+            ] as [String : Any]
+            
+            let recipientdata = [
+                FirebaseConstants.timestamp: Timestamp(),
+                FirebaseConstants.text: self.messageText,
+                FirebaseConstants.fromId: toId,
+                FirebaseConstants.toId: fromId,
+                FirebaseConstants.profileImageURL: currentUser.profileImageURL, // profile pic of message recipient
+                FirebaseConstants.username: currentUser.username
+            ] as [String : Any]
+            
+            
+            let senderMessageDocument = FirebaseManager.shared.firestore
+                .collection("recent_messages")
+                .document(fromId)
+                .collection("messages") // collection of all docs that will show up in main message view
+                .document(toId)
+            
+            let recipientMessageDocument = FirebaseManager.shared.firestore
+                .collection("recent_messages")
+                .document(toId)
+                .collection("messages")
+                .document(fromId) // collection of all docs that will show up in main message view
+              
+            
+            
+            senderMessageDocument.setData(data) { error in
+                
+                if let error = error {
+                    self.errorMessage = "Failed to save recent message: \(error)"
+                    print("Failed to save recent message: \(error)")
+                    return
+                }
+                
+                print("Hey sender, we have successfully saved your recent message!")
             }
             
-            print("Hey sender, we have successfully saved your recent message!")
+            recipientMessageDocument.setData(recipientdata) { error in
+                
+                if let error = error {
+                    self.errorMessage = "Failed to save recent message: \(error)"
+                    print("Failed to save recent message: \(error)")
+                    return
+                }
+            }
+            print("Hey recipient, we have successfully saved your recent message too!")
+            
+            self.messageText = "" // after the message is sent the textfield will clear out
+            self.count += 1
         }
         
-        recipientMessageDocument.setData(data) { error in
-            
-            if let error = error {
-                self.errorMessage = "Failed to save recent message: \(error)"
-                print("Failed to save recent message: \(error)")
-                return
-            }
-        }
-        print("Hey recipient, we have successfully saved your recent message too!")
 
+    }
+    
+    
+    func fetchCurrentUser(uid: String, completion: @escaping (AppUser) -> ()){
+
+        // fetch current user that's logged in
+        FirebaseManager.shared.firestore.collection("users").document(uid).getDocument { snapshot, error in
+            if let error = error {
+                self.errorMessage = "Failed to fetch current user: \(error)"
+                print("Failed to fetch current user:", error)
+                return
+            }
+            
+            guard let data = snapshot?.data() else {
+                self.errorMessage = "No data found"
+                return
+                
+            }
+            
+            // same as self.appUser = AppUser(username: username, uid: uid, email: email, profileImageURL: profileImageURL)
+            completion(.init(data: data))
+            
+          
+        }
     }
     
     @Published var count = 0

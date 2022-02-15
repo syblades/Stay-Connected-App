@@ -61,32 +61,34 @@ struct NewMessageView: View {
 
                 SearchBarView(searchText: $searchText)
                     .padding(.top)
-                
-                List(self.viewModel.users.filter(
-                    { searchText.isEmpty ? true : $0.username.localizedCaseInsensitiveContains(searchText) }
-                )) { user in
-//                    Text(user.username)
-                    Button {
-                            presentationMode.wrappedValue.dismiss()
-                            selectedNewUser(user)
-    
-                        } label: {
-                            HStack(spacing: 16) {
-                                WebImage(url: URL(string:user.profileImageURL))
-                                    .resizable()
-                                    .scaledToFill()
-                                    .frame(width: 50, height: 50)
-                                    .clipped() // clips off edges outside of frame
-                                    .cornerRadius(50)
-                                    .overlay(RoundedRectangle(cornerRadius: 50).stroke(Color(.black), lineWidth: 2))
-                                Text(user.username)
-                                    .foregroundColor(Color(.white))
-                                Spacer()
-                            }.padding(.horizontal)
-    
-                        }
-                        
+                ScrollView {
+                    ForEach(self.viewModel.users.filter(
+                        { searchText.isEmpty ? true : $0.username.localizedCaseInsensitiveContains(searchText) }
+                    )) { user in
+    //                    Text(user.username)
+                        Button {
+                                presentationMode.wrappedValue.dismiss()
+                                selectedNewUser(user)
+        
+                            } label: {
+                                HStack(spacing: 16) {
+                                    WebImage(url: URL(string:user.profileImageURL))
+                                        .resizable()
+                                        .scaledToFill()
+                                        .frame(width: 50, height: 50)
+                                        .clipped() // clips off edges outside of frame
+                                        .cornerRadius(50)
+                                        .overlay(RoundedRectangle(cornerRadius: 50).stroke(Color(.black), lineWidth: 2))
+                                    Text(user.username)
+                                        .foregroundColor(Color(.white))
+                                    Spacer()
+                                }.padding(.horizontal)
+        
+                            }
+                            
+                    }
                 }
+              
         
         
                        

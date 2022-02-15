@@ -55,6 +55,8 @@ class MainMessagesViewModel: ObservableObject {
     @Published var recentMessages = [RecentMessage]()
     
     func fetchRecentMessages () {
+        
+        self.recentMessages = []
         guard let uid = FirebaseManager.shared.auth.currentUser?.uid else { return }
         
         
@@ -121,7 +123,8 @@ class MainMessagesViewModel: ObservableObject {
             
             // same as self.appUser = AppUser(username: username, uid: uid, email: email, profileImageURL: profileImageURL)
             self.appUser = .init(data: data)
-
+            
+          
         }
     }
     

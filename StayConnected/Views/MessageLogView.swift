@@ -100,15 +100,13 @@ struct MessageLogView: View {
             Button {
                 viewModel.handleSend()
             } label: {
-                Text("Send")
-                    .foregroundColor(.white)
-                
+                Image(systemName: "paperplane.fill")
+                    .font(.system(size: 28))
+                    .foregroundColor(Color(.green))
+
             }
             .padding(.horizontal)
             .padding(.vertical, 8)
-            .background(Color.green)
-            .cornerRadius(4)
-
         }
         .padding(.horizontal)
         .padding(.vertical, 8)
@@ -128,10 +126,11 @@ struct MessageView: View {
                     Spacer()
                     HStack {
                         Text(message.text)
-                            .foregroundColor(Color(.white))
+                            .foregroundColor(Color(.white)).opacity(1.0)
                     }
                     .padding()
-                    .background(Color.black)
+                    .background(Color.black.opacity(0.65))
+                    
                     .cornerRadius(8)
                 }
             
@@ -139,10 +138,10 @@ struct MessageView: View {
                 HStack {
                     HStack {
                         Text(message.text)
-                            .foregroundColor(Color(.systemGray6))
+                            .foregroundColor(Color(.black)).opacity(1.0)
                     }
                     .padding()
-                    .background(Color.white)
+                    .background(Color.white.opacity(0.85))
                     .cornerRadius(8)
                     Spacer()
                 }
@@ -159,12 +158,14 @@ private struct DescriptionPlaceholder: View {
     var body: some View {
         HStack {
             Text("What's on Your Mind?")
-                .foregroundColor(Color(.white))
-                .font(.system(size: 17))
+                .foregroundColor(Color(.white)).opacity(1.0)
+                .font(.system(size: 18, weight: .semibold))
                 .padding(.leading, 5)
-                .padding(.top, -2)
             Spacer()
-        }
+        }.padding()
+        .cornerRadius(10)
+        .padding(.top, -10)
+        
     }
 }
 

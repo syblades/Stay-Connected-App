@@ -60,7 +60,8 @@ struct NewMessageView: View {
             VStack {
 
                 SearchBarView(searchText: $searchText)
-                    .padding(.top)
+                    .padding()
+                  
                 ScrollView {
                     ForEach(self.viewModel.users.filter(
                         { searchText.isEmpty ? true : $0.username.localizedCaseInsensitiveContains(searchText) }
@@ -75,14 +76,17 @@ struct NewMessageView: View {
                                     WebImage(url: URL(string:user.profileImageURL))
                                         .resizable()
                                         .scaledToFill()
-                                        .frame(width: 50, height: 50)
-                                        .clipped() // clips off edges outside of frame
-                                        .cornerRadius(50)
-                                        .overlay(RoundedRectangle(cornerRadius: 50).stroke(Color(.black), lineWidth: 2))
+                                        .frame(width: 54, height:54)
+                                        .clipped()
+                                        .cornerRadius(54)
+                                        .overlay(RoundedRectangle(cornerRadius: 54).stroke(Color.black, lineWidth: 1))
+                                        .shadow(radius: 5)
                                     Text(user.username)
+                                        .font(.system(size: 16, weight: .bold))
                                         .foregroundColor(Color(.white))
                                     Spacer()
                                 }.padding(.horizontal)
+                                    .padding(.vertical, 4)
         
                             }
                             

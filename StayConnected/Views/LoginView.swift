@@ -66,7 +66,7 @@ struct LoginView: View {
                                         .cornerRadius(64)
                                 } else {
                                     Image(systemName: "person.fill")
-                                        .font(.system(size: 64))
+                                        .font(.system(size: 70))
                                         .padding()
                                         .foregroundColor(Color(.black))
                                 }
@@ -80,14 +80,20 @@ struct LoginView: View {
                         }
                         
                         
+                       
+                          
+
                         
-                            
-                        TextField("Username", text: $username)
+                        
+                        TextField("", text: $username)
+                            .modifier(PlaceholderStyle(showPlaceHolder: username.isEmpty,
+                                                       placeholder: "Username"))
+                            .foregroundColor(Color.black)
                             .keyboardType(.default)
                             .autocapitalization(.none)
                             .padding(16)
-                            .foregroundColor(Color(.black))
                             .background(Color(.white))
+                            .cornerRadius(8)
                     }
                        
 
@@ -97,16 +103,22 @@ struct LoginView: View {
 
                     Group {
                                                 
-                        TextField("Email", text: $email)
+                        TextField("", text: $email)
+                        
+                            .modifier(PlaceholderStyle(showPlaceHolder: email.isEmpty,
+                                                       placeholder: "Email"))
                             .keyboardType(.emailAddress)
                             .autocapitalization(.none)
                         
                         // 'SecureField' creates a 'mask' so password isnt visible when user enters
-                        SecureField("Password", text: $password)
+                        SecureField("", text: $password)
+                            .modifier(PlaceholderStyle(showPlaceHolder: password.isEmpty,
+                                                       placeholder: "Password"))
                     }
                     .padding(16)
                     .foregroundColor(Color(.black))
                     .background(Color(.white))
+                    .cornerRadius(6)
                     Spacer()
  
                     
@@ -118,12 +130,13 @@ struct LoginView: View {
                             Spacer()
                             Text(isLoginMode ? "Log In" : "Create Account") // logic to update button based on which option is selected
                                 .foregroundColor(.white)
-                                .padding(.vertical, 10)
+                                .padding(.vertical, 15)
                                 
                                 .font(.system(size: 18, weight:.semibold))
                             Spacer()
                         }.background(Color.black)
                             .cornerRadius(30)
+                            .shadow(radius: 15)
                             .padding()
                     }
                     
@@ -151,6 +164,25 @@ struct LoginView: View {
         .fullScreenCover(isPresented: $shouldShowImagePicker, onDismiss: nil) {
             ImagePicker(image: $image)
             
+        }
+    }
+    
+    
+    public struct PlaceholderStyle: ViewModifier {
+        var showPlaceHolder: Bool
+        var placeholder: String
+
+        public func body(content: Content) -> some View {
+            ZStack(alignment: .leading) {
+                if showPlaceHolder {
+                    Text(placeholder)
+                        .foregroundColor(Color.gray)
+                    
+                }
+                content
+                
+                
+            }
         }
     }
     

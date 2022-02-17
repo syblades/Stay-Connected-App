@@ -5,7 +5,6 @@
 //  Created by Symone Blades on 1/30/22.
 //
 
-// private function gives access only to the class itself
 
 import SwiftUI
 import SDWebImageSwiftUI
@@ -14,15 +13,13 @@ import SDWebImageSwiftUI
 struct MainMessagesView: View {
     
     @State var shouldShowLogOutOptions = false
-    // handling click action on new message button
     @State var showCreateMessageScreen = false
-    
     @State var navigateToChatLogView = false
-    
     @State var showSettingsScreen = false
+    @State var appUser: AppUser?
+
     
     @ObservedObject private var viewModel = MainMessagesViewModel()
-    
     
     
     var body: some View {
@@ -32,13 +29,9 @@ struct MainMessagesView: View {
                 
                 VStack {
                     CustomNavigationBar
-//                        .background(LinearGradient(gradient: Gradient(colors: [.purple, .blue, .black]), startPoint: .topLeading, endPoint: .bottomTrailing)
-//                                        .ignoresSafeArea())
-                    
                     .padding()
                     messagesView
-                        
-                    
+
                     NavigationLink("", isActive: $navigateToChatLogView) {
                         MessageLogView(appUser: self.appUser)
                     }
@@ -60,7 +53,6 @@ struct MainMessagesView: View {
             }
             
         }
-//        .navigationBarHidden(true)
                 
     }
     
@@ -79,16 +71,13 @@ struct MainMessagesView: View {
                 .overlay(RoundedRectangle(cornerRadius: 64).stroke(Color.black, lineWidth: 1))
                 .shadow(radius: 5)
                 
-            
-////
-           
 
-            
             VStack(alignment: .leading, spacing: 4) {
-                Text("\(viewModel.greetingLogic())") // time specific greeting for user
+                
+                // time specific greeting for user
+                Text("\(viewModel.greetingLogic())")
                     .font(.system(size: 24, weight: .bold))
                     .foregroundColor(Color(.black))
-                    
                     
                 HStack {
                     Circle()
@@ -101,10 +90,7 @@ struct MainMessagesView: View {
                 
             }
             Spacer()
-            
 
-            
-           
         VStack {
          
             Button {
@@ -122,7 +108,6 @@ struct MainMessagesView: View {
 
         .padding()
 
-        // sets the option of logging out or cancelling operation
         .actionSheet(isPresented: $shouldShowLogOutOptions) {
             .init(title: Text(""), message: Text("Sure You Want to Log Out?"), buttons: [ .destructive(Text("Log Me Out"), action: {
                     print("handle log out")
@@ -141,8 +126,6 @@ struct MainMessagesView: View {
     private var messagesView: some View {
         ScrollView {
             ForEach(viewModel.recentMessages) { recentMessage in
-                // grouped entire message view minus the header in order to apply horizontal padding
-                
                 VStack {
                     NavigationLink(destination: {
                         MessageLogView(toId: recentMessage.toId)
@@ -178,11 +161,6 @@ struct MainMessagesView: View {
                         
 
                     })
-//                        navigateToChatLogView.toggle()
-//                        self.viewModel.fetchCurrentUser()
-//                        self.viewModel.fetchRecentMessages()
-                        // click on message in messageview it will take you to chat log view for user
-                  
 
                     
                     Divider()
@@ -222,15 +200,13 @@ struct MainMessagesView: View {
         .fullScreenCover(isPresented: $showCreateMessageScreen) {
             NewMessageView(selectedNewUser: { user in
                 print(user.username)
-                // new message -> user -> displays chat history with that user
                 self.navigateToChatLogView.toggle()
-                self.appUser = user // what user we selected
+                self.appUser = user
             })
             
         }
     }
     
-    @State var appUser: AppUser? // user will be nil in the beginning
     
   
 }

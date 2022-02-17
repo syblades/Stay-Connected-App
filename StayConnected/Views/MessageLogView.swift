@@ -39,7 +39,7 @@ struct MessageLogView: View {
             Text(viewModel.errorMessage)
         }
         
-        .navigationTitle("\(viewModel.appUser?.username ?? "")") // displays the users username at the top of the chat window
+        .navigationTitle("\(viewModel.appUser?.username ?? "")")
             .navigationBarTitleDisplayMode(.inline)
         
 
@@ -59,9 +59,8 @@ struct MessageLogView: View {
                         .id(Self.emptyScroll)
                     }
                     .onReceive(viewModel.$count) { _ in
-//                        withAnimation(.easeOut(duration: 0.5)) {
                             scrollViewProxy.scrollTo(Self.emptyScroll, anchor: .bottom)
-//                        }
+
                     }
 
                     
@@ -69,8 +68,7 @@ struct MessageLogView: View {
                 
             }
             .background(LinearGradient(gradient: Gradient(colors: [.purple, .blue, .black]), startPoint: .topLeading, endPoint: .bottomTrailing)
-                            .ignoresSafeArea()) // applies color to entire screen, previously it left out top
-//            .background(Color(.init(white: 0.95, alpha: 1)))
+                            .ignoresSafeArea()) 
             .safeAreaInset(edge: .bottom) {
                 messageBottomArea
                     .background(Color(.black).ignoresSafeArea())
@@ -90,7 +88,7 @@ struct MessageLogView: View {
             
             ZStack {
                 DescriptionPlaceholder()
-                TextEditor(text: $viewModel.messageText) // have to use viewmodel since messageText is a published variable
+                TextEditor(text: $viewModel.messageText)
                     .opacity(viewModel.messageText.isEmpty ? 0.5: 2)
                 
                 
@@ -102,7 +100,7 @@ struct MessageLogView: View {
             } label: {
                 Image(systemName: "paperplane.fill")
                     .font(.system(size: 28))
-                    .foregroundColor(Color(.green))
+                    .foregroundColor(Color(.systemBlue))
 
             }
             .padding(.horizontal)
@@ -121,7 +119,7 @@ struct MessageView: View {
     var body: some View {
         
         VStack {
-            if message.fromId == FirebaseManager.shared.auth.currentUser?.uid { // checking to see if this user if the sender to set the ui for the message log view
+            if message.fromId == FirebaseManager.shared.auth.currentUser?.uid {
                 HStack {
                     Spacer()
                     HStack {
@@ -134,7 +132,7 @@ struct MessageView: View {
                     .cornerRadius(8)
                 }
             
-            } else { // recipient message ui
+            } else {
                 HStack {
                     HStack {
                         Text(message.text)
@@ -169,14 +167,3 @@ private struct DescriptionPlaceholder: View {
     }
 }
 
-//struct MessageLogView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        MainMessagesView()
-////        MessageLogView(appUser: .init(data: ["username" : "syblades"]))
-////        NavigationView {
-////            MessageLogView(appUser: .init(data: ["username" : "syblades"]))
-//        //        }
-//
-//    }
-//
-//}

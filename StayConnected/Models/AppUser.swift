@@ -11,7 +11,7 @@ import FirebaseFirestore
 
 struct AppUser: Identifiable {
     
-    var id: String { uid } // getter syntax. For every Identifable need a variable
+    var id: String { uid }
     
     let username, uid, email, profileImageURL, timestamp: String
     
@@ -25,12 +25,3 @@ struct AppUser: Identifiable {
     }
     
 }
- 
-
-
-
-//if let error = error {
-//    self.errorMessage = "Failed to listen for recent messages: \(error)"
-//    print(error)
-//    return
-//}

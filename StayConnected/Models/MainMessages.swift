@@ -13,18 +13,20 @@ class MainMessagesViewModel: ObservableObject {
     
     @Published var errorMessage = ""
     @Published var appUser: AppUser?
+    @Published var recentMessages = [RecentMessage]()
+    @Published var UserCurrentlyLoggedOut = false
+
+
     
     init() {
-        
-        // so there isnt any lag in presenting the cover
-            
-            // if UserCurrentlyLoggedOut is true it will by default present the cover to the login view
-            self.UserCurrentlyLoggedOut = FirebaseManager.shared.auth.currentUser?.uid == nil // checking if uid exists in the FireBase manager shared auth variable. if it's nil means user isnt logged in and UserCurrenlyLoggedOut evaluates to true
-        
+        // if UserCurrentlyLoggedOut is true it will by default present the cover to the login view
+        // checking if uid exists in the FireBase manager shared auth variable.
+        // if it's nil means user isnt logged in and UserCurrenlyLoggedOut evaluates to true
+        self.UserCurrentlyLoggedOut = FirebaseManager.shared.auth.currentUser?.uid == nil
         fetchCurrentUser()
-        
         fetchRecentMessages()
     }
+    
     
     func greetingLogic() -> String {
         let hour = Calendar.current.component(.hour, from: Date())
@@ -35,8 +37,7 @@ class MainMessagesViewModel: ObservableObject {
         let MIDNIGHT = 24
         
     
-
-        var greetingText = ("Hello, \(appUser?.username ?? "")👋🏾") // Default greeting text
+        var greetingText = ("Hello, \(appUser?.username ?? "")👋🏾")
         switch hour {
         case NEW_DAY..<NOON:
             greetingText = ("Good Morning, \(appUser?.username ?? "")☀️")
@@ -52,7 +53,7 @@ class MainMessagesViewModel: ObservableObject {
 
       }
     
-    @Published var recentMessages = [RecentMessage]()
+    
     
     func fetchRecentMessages () {
         
@@ -128,7 +129,6 @@ class MainMessagesViewModel: ObservableObject {
         }
     }
     
-    @Published var UserCurrentlyLoggedOut = false
     
     func handleLogOut() {
         UserCurrentlyLoggedOut.toggle()

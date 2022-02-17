@@ -26,6 +26,7 @@ struct RecentMessage : Codable, Identifiable {
         return formatter.localizedString(for: timestamp, relativeTo: Date())
     }
    
+    // to shorten long text messages in the main messages view
     func shortText () -> String {
         let kMaxCount = 40
         if text.count < kMaxCount {

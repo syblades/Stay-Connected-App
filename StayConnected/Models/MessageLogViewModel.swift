@@ -10,9 +10,7 @@ import FirebaseFirestore
 
 
 struct FirebaseConstants {
-    // declaring the attributes as constants
-    // instead of using hard coded string values in various places in code base. Declare constants
-    // so update in one place
+   
     static let fromId = "fromId"
     static let toId = "toId"
     static let text = "text"
@@ -23,7 +21,9 @@ struct FirebaseConstants {
 }
 struct AppMessage:Identifiable {
     
-    var id: String { documentId } // when you confirm to indentifible you have to declare an id. This is so we can use AppMessage in the message log view
+    // when you confirm to indentifible you have to declare an id.
+    // This is so we can use AppMessage in the message log view
+    var id: String { documentId }
     
     let documentId: String
     let fromId, toId, text, timestamp: String
@@ -43,11 +43,11 @@ class MessageLogViewModel: ObservableObject {
     
     @Published var messageText = ""
     @Published var errorMessage = ""
-    
     @Published var appMessages = [AppMessage]()
+    @Published var count = 0
+
     
     var appUser: AppUser?
-    
     var toId: String?
     
     
@@ -102,7 +102,9 @@ class MessageLogViewModel: ObservableObject {
                     return
                 }
                 
-                // listens for new messages ie changes in the document. stores all messages in a list so they are always present in the users message log view and each time a new message is added the listener recognizes it and appends it to the array (message log view) and in realtime updates to the user phone
+                // listens for new messages ie changes in the document
+                // stores all messages in a list so they are always present in the users message log view and each time a new message is added
+                // the listener recognizes it, appends it to the array (message log view), and in realtime updates to the users phone
                 querySnapshot?.documentChanges.forEach({ change in
                     if change.type == .added {
                         let data = change.document.data()
@@ -110,10 +112,11 @@ class MessageLogViewModel: ObservableObject {
                     }
                 })
                 
-                //waits for next available main thread frame, then it will execute the count change then the scrollview proxy
-                // can animate itself properly
+                // waits for next available main thread frame
+                // then it will execute the count change
+                // then the scrollview proxy can animate itself properly
                 DispatchQueue.main.async {
-                    self.count += 1 // should help auto scroll
+                    self.count += 1
 
                 }
                 
@@ -129,7 +132,8 @@ class MessageLogViewModel: ObservableObject {
         guard let toId = appUser?.uid else { return }
         
         // saving messages to firestore storage
-        let senderMessageDocument = FirebaseManager.shared.firestore.collection("messages") // collection stores all messages between users (message log view)
+        // collection stores all messages between users (message log view)
+        let senderMessageDocument = FirebaseManager.shared.firestore.collection("messages")
             .document(fromId) // stores the user who is sending the message
             .collection(toId) // collection stores all users you've sent a message to (main message log view)
             .document()
@@ -148,7 +152,7 @@ class MessageLogViewModel: ObservableObject {
             
         }
         
-        let recipientMessageDocument = FirebaseManager.shared.firestore.collection("messages") // collection stores all messages between users (message log view)
+        let recipientMessageDocument = FirebaseManager.shared.firestore.collection("messages")
             .document(toId) // stores the user who is sending the message
             .collection(fromId) // collection stores all users you've sent a message to (main message log view)
             .document()
@@ -179,7 +183,7 @@ class MessageLogViewModel: ObservableObject {
                 FirebaseConstants.text: self.messageText,
                 FirebaseConstants.fromId: fromId,
                 FirebaseConstants.toId: toId,
-                FirebaseConstants.profileImageURL: appUser.profileImageURL, // profile pic of message recipient
+                FirebaseConstants.profileImageURL: appUser.profileImageURL,
                 FirebaseConstants.username: appUser.username
             ] as [String : Any]
             
@@ -188,7 +192,7 @@ class MessageLogViewModel: ObservableObject {
                 FirebaseConstants.text: self.messageText,
                 FirebaseConstants.fromId: toId,
                 FirebaseConstants.toId: fromId,
-                FirebaseConstants.profileImageURL: currentUser.profileImageURL, // profile pic of message recipient
+                FirebaseConstants.profileImageURL: currentUser.profileImageURL,
                 FirebaseConstants.username: currentUser.username
             ] as [String : Any]
             
@@ -196,14 +200,14 @@ class MessageLogViewModel: ObservableObject {
             let senderMessageDocument = FirebaseManager.shared.firestore
                 .collection("recent_messages")
                 .document(fromId)
-                .collection("messages") // collection of all docs that will show up in main message view
+                .collection("messages")
                 .document(toId)
             
             let recipientMessageDocument = FirebaseManager.shared.firestore
                 .collection("recent_messages")
                 .document(toId)
                 .collection("messages")
-                .document(fromId) // collection of all docs that will show up in main message view
+                .document(fromId)
               
             
             
@@ -259,5 +263,4 @@ class MessageLogViewModel: ObservableObject {
         }
     }
     
-    @Published var count = 0
 }

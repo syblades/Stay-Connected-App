@@ -9,10 +9,10 @@
 
 ## Dependencies
 - Stay Connected needs the following technologies to run properly:
-- **Google Firebase:**
-	- Firebase Auth
-	- Firestore Database
-	- Firebase Storage
+	- **Google Firebase:**
+		- Firebase Auth
+		- Firestore Database
+		- Firebase Storage
 
 ## Setup
 - Set up your iOS app for [Firestore](https://firebase.google.com/docs/firestore/quickstart).

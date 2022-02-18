@@ -148,9 +148,10 @@ struct LoginView: View {
                 if showPlaceHolder {
                     Text(placeholder)
                         .foregroundColor(Color.gray)
-                    
+
                 }
- 
+    
+                content
             }
         }
     }

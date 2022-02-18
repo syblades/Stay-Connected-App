@@ -4,9 +4,8 @@
 - Stay Connected is a real-time text messaging application built with Swift, SwiftUI and Firebase. 
 
 ## UI Preview
-![This is an image](StayConnected/Assets/Assets.xcassets/simulator_screenshot_2E17D638-2A16-4717-8315-CD53A884304F.imageset/simulator_screenshot_2E17D638-2A16-4717-8315-CD53A884304F.png)
-![This is an image](StayConnected/Assets/Assets.xcassets/simulator_screenshot_2E17D638-2A16-4717-8315-CD53A884304F.imageset/simulator_screenshot_8CF07BFF-5079-47A6-812E-5F3834506EFB.png)
-![This is an image](StayConnected/Assets/Assets.xcassets/simulator_screenshot_2E17D638-2A16-4717-8315-CD53A884304F.imageset/simulator_screenshot_F4070756-0E67-49BA-959E-74F330E472C0.png)
+<img src="https://github.com/syblades/Stay-Connected-App/blob/db988094b93d921451fe746bd883ce9cd8120b35/StayConnected/Assets/Assets.xcassets/README%20Images/simulator_screenshot_827E87AF-0006-4571-8BC7-7644F63DA661.imageset/simulator_screenshot_827E87AF-0006-4571-8BC7-7644F63DA661.png" height="450"> &nbsp; &nbsp; &nbsp; &nbsp; <img src="https://github.com/syblades/Stay-Connected-App/blob/db988094b93d921451fe746bd883ce9cd8120b35/StayConnected/Assets/Assets.xcassets/README%20Images/simulator_screenshot_827E87AF-0006-4571-8BC7-7644F63DA661.imageset/simulator_screenshot_B7756F20-F371-4D25-B539-5757C265D5BA.png" height="450"> &nbsp; &nbsp; &nbsp; &nbsp;   <img src="https://github.com/syblades/Stay-Connected-App/blob/db988094b93d921451fe746bd883ce9cd8120b35/StayConnected/Assets/Assets.xcassets/README%20Images/simulator_screenshot_827E87AF-0006-4571-8BC7-7644F63DA661.imageset/simulator_screenshot_91E9F317-B216-4351-9D66-B431BD07C85D.png" height="450">
+
 
 ## Dependencies
 - Stay Connected needs the following technologies to run properly:
